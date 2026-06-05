@@ -1,10 +1,14 @@
-export const PORT = 3002;
+export const PORT = 3001;
 
 export const API_ENDPOINTS = {
   BASE: "/user",
   SCHOOL: "/school",
   SCHOOL_BY_ID: "/school/:id",
   SCHOOLS: "/schools",
+
+  CMS_PAGE: "/page",
+  CMS_PAGE_BY_ID: "/page/:id",
+  CMS_PAGES: "/pages",
 };
 
 export const API_RESPONSES = {
@@ -24,11 +28,14 @@ export const API_RESPONSES = {
 export const API_ERRORS = {
   DATABASE_ERROR: "Database Error!",
   USER_SERVICE_ERROR: "Unexpected error while calling user service",
-
+  // School
   SCHOOL_SLUG_NAME_ERROR: "School already exists with same name & slug",
   SlUG_ERROR: "School already exists with same slug",
   NAME_ERROR: "School already exists with same name",
   INVAID_SCHOOL_ID: "Provide vaild school Id",
+  // Pages
+  PAGE_SLUG_ERROR: "Page already exits with same slug",
+  PAGE_NOT_EXITS: "Page dose not exists",
 
   SEND_PROPER_JSON: "Send a proper JSON data",
 };
