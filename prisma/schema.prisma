@@ -7,35 +7,74 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum PageSection {
+  HOME
+  SCHOOL
+  NONE
+}
+
+enum PageType {
+  TOP
+  HEADER
+  FOOTER
+  MAIN
+  NONE
+}
+
+enum ContentType {
+  CONTENT_PAGE
+  URL
+}
+
+enum TargetType {
+  SELF
+  NEW
+}
+
 model CmsPage {
   cms_id               String              @id @default(uuid())
   cms_page_name        String       
   cms_slug             String              @unique
-  cms_section          PageSection         @default(MAIN)
   cms_parent_id        String?              
   cms_page_order       Int                 @default(1) 
-  cms_page_type        PageType            @default(NONE) 
-  cms_content_type     ContentType         @default(CONTENT_PAGE) 
   cms_external_url     String?             @db.Text
   cms_page_title       String     
   cms_meta_description String?             @db.Text
   cms_meta_keywords    String?             @db.Text
   cms_is_published     Boolean             @default(false) 
-  cms_target           TargetType          @default(SELF)
   cms_school_id        String?     
-  cms_category         PageCategory        @default(NORMAL)
+  cms_is_active        Boolean             @default(false) // soft delete page
+  cms_section          PageSection         @default(HOME) // home page or school page
+  cms_page_type        PageType            @default(NONE) // display on top, or just create page
+  cms_content_type     ContentType         @default(CONTENT_PAGE) // page holds content or it's url
+  cms_target           TargetType          @default(SELF) // should open on new page or same page
+
   createdAt            DateTime            @default(now())
   updatedAt            DateTime            @updatedAt
   parent               CmsPage?            @relation("PageHierarchy", fields: [cms_parent_id], references: [cms_id], onDelete: SetNull)
+  
   children             CmsPage[]           @relation("PageHierarchy")
-  school               School?             @relation(fields: [cms_school_id], references: [cms_id], onDelete: SetNull)
- 
+  
+  school               School?             @relation(fields: [cms_school_id], references: [school_id], onDelete: SetNull)
+
   @@index([cms_slug])
-  @@index([cms_parent_id])
   @@index([cms_section])
   @@index([cms_school_id])
   @@index([cms_is_published])
   @@index([cms_parent_id])
-  @@index([cms_category])
   @@map("cms_pages")
+}
+
+model School {
+  school_id             String           @id @default(uuid())
+  school_name           String           @unique
+  school_slug           String           @unique
+  school_description    String?          @db.Text
+  school_is_active      Boolean          @default(true) @map("is_active") // soft delete school
+  createdAt             DateTime         @default(now())  @map("created_at")
+  updatedAt             DateTime         @updatedAt       @map("updated_at")
+  
+  pages       CmsPage[]
+  
+  @@map("schools")
 }
