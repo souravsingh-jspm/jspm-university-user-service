@@ -6,3 +6,36 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model CmsPage {
+  cms_id               String              @id @default(uuid())
+  cms_page_name        String       
+  cms_slug             String              @unique
+  cms_section          PageSection         @default(MAIN)
+  cms_parent_id        String?              
+  cms_page_order       Int                 @default(1) 
+  cms_page_type        PageType            @default(NONE) 
+  cms_content_type     ContentType         @default(CONTENT_PAGE) 
+  cms_external_url     String?             @db.Text
+  cms_page_title       String     
+  cms_meta_description String?             @db.Text
+  cms_meta_keywords    String?             @db.Text
+  cms_is_published     Boolean             @default(false) 
+  cms_target           TargetType          @default(SELF)
+  cms_school_id        String?     
+  cms_category         PageCategory        @default(NORMAL)
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+  parent               CmsPage?            @relation("PageHierarchy", fields: [cms_parent_id], references: [cms_id], onDelete: SetNull)
+  children             CmsPage[]           @relation("PageHierarchy")
+  school               School?             @relation(fields: [cms_school_id], references: [cms_id], onDelete: SetNull)
+ 
+  @@index([cms_slug])
+  @@index([cms_parent_id])
+  @@index([cms_section])
+  @@index([cms_school_id])
+  @@index([cms_is_published])
+  @@index([cms_parent_id])
+  @@index([cms_category])
+  @@map("cms_pages")
+}
