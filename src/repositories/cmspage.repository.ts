@@ -19,15 +19,24 @@ class CMSPageRepository {
     );
   };
 
-  getAll = async (page: number, limit: number) => {
+  getAll = async (page: number, limit: number, search?: string) => {
     const skip = (page - 1) * limit;
+    const where = search
+      ? {
+          cms_slug: {
+            contains: search,
+          },
+        }
+      : {};
+
     return await queryHandler(async () => {
       const [pages, count] = await Promise.all([
         prisma.cmsPage.findMany({
+          where,
           skip,
           take: limit,
         }),
-        prisma.school.count(),
+        prisma.cmsPage.count({ where }),
       ]);
 
       return { pages, count };

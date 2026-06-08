@@ -36,8 +36,9 @@ class CmsPageController {
 
   getById = asyncHandler(async (req, res) => {
     const { id } = req.params;
+    console.log("getting by id", id);
     const result = await this.cMSPageService.getById(id as string);
-
+    console.log(result);
     return res
       .status(StatusCodes.OK)
       .json(
@@ -59,7 +60,8 @@ class CmsPageController {
   getAll = asyncHandler(async (req, res) => {
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 10;
-    const result = await this.cMSPageService.getAll(page, limit);
+    const search = req.query.search?.toString() || "";
+    const result = await this.cMSPageService.getAll(page, limit, search);
 
     return res.status(StatusCodes.OK).json(
       new ApiResponse(

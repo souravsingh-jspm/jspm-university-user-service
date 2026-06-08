@@ -43,7 +43,7 @@ model CmsPage {
   cms_meta_keywords    String?             @db.Text
   cms_is_published     Boolean             @default(false) 
   cms_school_id        String?     
-  cms_is_active        Boolean             @default(false) // soft delete page
+  cms_is_active        Boolean             @default(true) // soft delete page
   cms_section          PageSection         @default(HOME) // home page or school page
   cms_page_type        PageType            @default(NONE) // display on top, or just create page
   cms_content_type     ContentType         @default(CONTENT_PAGE) // page holds content or it's url

@@ -41,7 +41,7 @@ class CMSPageService {
       throw new ApiError(StatusCodes.BAD_REQUEST, API_ERRORS.PAGE_SLUG_ERROR);
 
     const result = await this.cMSPageRepository.create(data);
-    return { data: result };
+    return result;
   };
 
   update = async (data: updateCMSPagelType, id: string) => {
@@ -54,15 +54,22 @@ class CMSPageService {
     return { data: result };
   };
   getById = async (id: string) => {
+    const isIdValid = await this.cMSPageRepository.getById(id);
+    if (!isIdValid)
+      throw new ApiError(StatusCodes.BAD_REQUEST, API_ERRORS.PAGE_NOT_EXITS);
     const result = await this.cMSPageRepository.getById(id);
+    return result;
   };
 
   delete = async (id: string) => {
+    const isIdValid = await this.cMSPageRepository.getById(id);
+    if (!isIdValid)
+      throw new ApiError(StatusCodes.BAD_REQUEST, API_ERRORS.PAGE_NOT_EXITS);
     const result = await this.cMSPageRepository.delete(id);
   };
 
-  getAll = async (page: number, limit: number) => {
-    const data = await this.cMSPageRepository.getAll(page, limit);
+  getAll = async (page: number, limit: number, search?: string) => {
+    const data = await this.cMSPageRepository.getAll(page, limit, search);
     return data;
   };
 }

@@ -9,6 +9,7 @@ export const queryHandler = async <T>(
   try {
     return await queryPromise();
   } catch (error) {
+    console.log(error);
     throw new ApiError(
       StatusCodes.INTERNAL_SERVER_ERROR,
       API_ERRORS.DATABASE_ERROR,
