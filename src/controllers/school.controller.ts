@@ -2,6 +2,7 @@ import { ApiResponse, asyncHandler } from "common-microservices-utils";
 import { StatusCodes } from "http-status-codes";
 import SchoolService from "../services/school.service";
 import { API_RESPONSES } from "../constants/app.constant";
+import { getPagination } from "../utils/pagination";
 
 class SchoolController {
   schoolService: SchoolService;
@@ -35,7 +36,7 @@ class SchoolController {
     return res
       .status(StatusCodes.OK)
       .json(
-        new ApiResponse(StatusCodes.OK, result, API_RESPONSES.SCHOOL_UPDATE),
+        new ApiResponse(StatusCodes.OK, result, API_RESPONSES.SCHOOL_FETCHED),
       );
   });
   delete = asyncHandler(async (req, res) => {
@@ -44,18 +45,25 @@ class SchoolController {
     return res
       .status(StatusCodes.OK)
       .json(
-        new ApiResponse(StatusCodes.OK, result, API_RESPONSES.SCHOOL_UPDATE),
+        new ApiResponse(StatusCodes.OK, result, API_RESPONSES.SCHOOL_DELETE),
       );
   });
   getAll = asyncHandler(async (req, res) => {
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 10;
+
     const result = await this.schoolService.getAll(page, limit);
-    return res
-      .status(StatusCodes.OK)
-      .json(
-        new ApiResponse(StatusCodes.OK, result, API_RESPONSES.SCHOOL_UPDATE),
-      );
+
+    return res.status(StatusCodes.OK).json(
+      new ApiResponse(
+        StatusCodes.OK,
+        {
+          data: result.schools,
+          pagination: getPagination(page, limit, result.count),
+        },
+        API_RESPONSES.SCHOOLS_FETCHED,
+      ),
+    );
   });
 }
 

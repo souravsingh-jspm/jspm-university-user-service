@@ -39,7 +39,7 @@ class SchoolService {
     const checkSchoolExists = await this.schoolRepository.getById(id);
 
     if (checkSchoolExists)
-      throw new ApiError(StatusCodes.BAD_REQUEST, API_ERRORS.INVAID_SCHOOL_ID);
+      throw new ApiError(StatusCodes.BAD_REQUEST, API_ERRORS.INVALID_SCHOOL_ID);
 
     const result = await this.schoolRepository.update(data, id);
     return result;
@@ -49,7 +49,7 @@ class SchoolService {
     const checkSchoolExists = await this.schoolRepository.getById(id);
 
     if (checkSchoolExists)
-      throw new ApiError(StatusCodes.BAD_REQUEST, API_ERRORS.INVAID_SCHOOL_ID);
+      throw new ApiError(StatusCodes.BAD_REQUEST, API_ERRORS.INVALID_SCHOOL_ID);
 
     const data = await this.schoolRepository.delete(id);
     return data;

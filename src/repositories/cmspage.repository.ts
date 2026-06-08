@@ -21,12 +21,17 @@ class CMSPageRepository {
 
   getAll = async (page: number, limit: number) => {
     const skip = (page - 1) * limit;
-    return await queryHandler(() =>
-      prisma.cmsPage.findMany({
-        skip,
-        take: limit,
-      }),
-    );
+    return await queryHandler(async () => {
+      const [pages, count] = await Promise.all([
+        prisma.cmsPage.findMany({
+          skip,
+          take: limit,
+        }),
+        prisma.school.count(),
+      ]);
+
+      return { pages, count };
+    });
   };
 
   delete = async (cms_id: string) => {

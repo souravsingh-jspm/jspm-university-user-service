@@ -32,7 +32,8 @@ export const API_ERRORS = {
   SCHOOL_SLUG_NAME_ERROR: "School already exists with same name & slug",
   SlUG_ERROR: "School already exists with same slug",
   NAME_ERROR: "School already exists with same name",
-  INVAID_SCHOOL_ID: "Provide vaild school Id",
+  MANDATORY_SCHOOL_ID: "School Id is manadatory",
+  INVALID_SCHOOL_ID: "Provide vaild school Id",
   // Pages
   PAGE_SLUG_ERROR: "Page already exits with same slug",
   PAGE_NOT_EXITS: "Page dose not exists",

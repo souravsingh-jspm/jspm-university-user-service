@@ -15,12 +15,19 @@ class SchoolRepository {
 
   getAll = async (page: number, limit: number) => {
     const skip = (page - 1) * limit;
-    return await queryHandler(() =>
-      prisma.school.findMany({
-        skip,
-        take: limit,
-      }),
-    );
+    return await queryHandler(async () => {
+      const [schools, count] = await Promise.all([
+        prisma.school.findMany({
+          skip,
+          take: limit,
+        }),
+        prisma.school.count(),
+      ]);
+      return {
+        schools,
+        count,
+      };
+    });
   };
 
   getById = async (school_id: string) => {

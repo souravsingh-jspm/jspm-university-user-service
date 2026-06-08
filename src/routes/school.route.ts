@@ -7,7 +7,7 @@ const SchoolRouter = express.Router();
 
 SchoolRouter.route(API_ENDPOINTS.SCHOOL).post(schoolController.create);
 
-SchoolRouter.route(API_ENDPOINTS.SCHOOL)
+SchoolRouter.route(API_ENDPOINTS.SCHOOL_BY_ID)
   .put(schoolController.update)
   .get(schoolController.getById)
   .delete(schoolController.delete);

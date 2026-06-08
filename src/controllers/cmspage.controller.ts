@@ -2,6 +2,7 @@ import { ApiResponse, asyncHandler } from "common-microservices-utils";
 import CMSPageService from "../services/cmspage.service";
 import { StatusCodes } from "http-status-codes";
 import { API_RESPONSES } from "../constants/app.constant";
+import { getPagination } from "../utils/pagination";
 
 class CmsPageController {
   cMSPageService: CMSPageService;
@@ -60,11 +61,16 @@ class CmsPageController {
     const limit = Number(req.query.limit) || 10;
     const result = await this.cMSPageService.getAll(page, limit);
 
-    return res
-      .status(StatusCodes.OK)
-      .json(
-        new ApiResponse(StatusCodes.OK, result, API_RESPONSES.PAGES_FETCHED),
-      );
+    return res.status(StatusCodes.OK).json(
+      new ApiResponse(
+        StatusCodes.OK,
+        {
+          data: result.pages,
+          pagination: getPagination(page, limit, result.count),
+        },
+        API_RESPONSES.PAGES_FETCHED,
+      ),
+    );
   });
 }
 

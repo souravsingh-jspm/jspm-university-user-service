@@ -3,18 +3,39 @@ import CMSPageRepository from "../repositories/cmspage.repository";
 import { createCMSPagelType, updateCMSPagelType } from "../types/page.type";
 import { API_ERRORS } from "../constants/app.constant";
 import { ApiError } from "common-microservices-utils";
+import SchoolRepository from "../repositories/school.repository";
 
 class CMSPageService {
   cMSPageRepository: CMSPageRepository;
+  schoolRepository: SchoolRepository;
 
   constructor() {
     this.cMSPageRepository = new CMSPageRepository();
+    this.schoolRepository = new SchoolRepository();
   }
 
   create = async (data: createCMSPagelType) => {
     const checkSlugExits = await this.cMSPageRepository.getBySlug(
       data.cms_slug,
     );
+
+    if (data.cms_section === "SCHOOL") {
+      if (data.cms_school_id === null)
+        throw new ApiError(
+          StatusCodes.BAD_REQUEST,
+          API_ERRORS.MANDATORY_SCHOOL_ID,
+        );
+
+      const checkVaildSchoolId = await this.schoolRepository.getById(
+        data.cms_school_id!,
+      );
+
+      if (!checkVaildSchoolId)
+        throw new ApiError(
+          StatusCodes.BAD_REQUEST,
+          API_ERRORS.INVALID_SCHOOL_ID,
+        );
+    }
 
     if (checkSlugExits)
       throw new ApiError(StatusCodes.BAD_REQUEST, API_ERRORS.PAGE_SLUG_ERROR);
