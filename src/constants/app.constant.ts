@@ -9,6 +9,7 @@ export const API_ENDPOINTS = {
   CMS_PAGE: "/page",
   CMS_PAGE_BY_ID: "/page/:id",
   CMS_PAGES: "/pages",
+  CMS_HOME_PAGES: "/home-pages",
 };
 
 export const API_RESPONSES = {
@@ -23,6 +24,8 @@ export const API_RESPONSES = {
   PAGE_UPDATED: "Page updated successfully",
   PAGE_FETCHED: "Page fetched successfully",
   PAGES_FETCHED: "Page's fetched successfully",
+
+  HOME_PAGE_FETCHED: "Home Page fetched successfully",
 };
 
 export const API_ERRORS = {

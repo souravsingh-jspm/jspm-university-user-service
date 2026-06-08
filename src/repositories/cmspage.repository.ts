@@ -54,6 +54,31 @@ class CMSPageRepository {
       prisma.cmsPage.findUnique({ where: { cms_slug } }),
     );
   };
+
+  getHomePages = async (cms_section: string, cms_page_type: string) => {
+    const where = {
+      cms_page_type: "TOP" as any,
+      cms_section: "HOME" as any,
+      cms_parent_id: null,
+    };
+
+    return await queryHandler(async () => {
+      const [pages, count] = await Promise.all([
+        prisma.cmsPage.findMany({
+          where,
+          include: {
+            children: {
+              include: {
+                children: true,
+              },
+            },
+          },
+        }),
+        prisma.cmsPage.count({ where }),
+      ]);
+      return { pages, count };
+    });
+  };
 }
 
 export default CMSPageRepository;

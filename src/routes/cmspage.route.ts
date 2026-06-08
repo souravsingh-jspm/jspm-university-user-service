@@ -14,4 +14,8 @@ CMSPageRouter.route(API_ENDPOINTS.CMS_PAGE_BY_ID)
 
 CMSPageRouter.route(API_ENDPOINTS.CMS_PAGES).get(cmsPageController.getAll);
 
+CMSPageRouter.route(API_ENDPOINTS.CMS_HOME_PAGES).get(
+  cmsPageController.getHomePages,
+);
+
 export default CMSPageRouter;

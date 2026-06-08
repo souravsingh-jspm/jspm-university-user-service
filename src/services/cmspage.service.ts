@@ -72,6 +72,14 @@ class CMSPageService {
     const data = await this.cMSPageRepository.getAll(page, limit, search);
     return data;
   };
+
+  getHomePages = async (cms_section: string, cms_page_type: string) => {
+    const data = await this.cMSPageRepository.getHomePages(
+      cms_section,
+      cms_page_type,
+    );
+    return data;
+  };
 }
 
 export default CMSPageService;
