@@ -10,6 +10,12 @@ export const API_ENDPOINTS = {
   CMS_PAGE_BY_ID: "/page/:id",
   CMS_PAGES: "/pages",
   CMS_HOME_PAGES: "/home-pages",
+  CMS_SCHOOL_PAGES: "/school-pages/:id",
+};
+
+export const CMS_SECTION = {
+  HOME: "HOME",
+  SCHOOL: "SCHOOL",
 };
 
 export const API_RESPONSES = {
@@ -26,6 +32,7 @@ export const API_RESPONSES = {
   PAGES_FETCHED: "Page's fetched successfully",
 
   HOME_PAGE_FETCHED: "Home Page fetched successfully",
+  SCHOOL_PAGES_FETCHED: "School Pages fetched successfully",
 };
 
 export const API_ERRORS = {

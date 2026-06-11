@@ -95,6 +95,29 @@ class CmsPageController {
       ),
     );
   });
+
+  getSchoolPages = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const CMS_Section = "SCHOOL"; // Both the cms constent are not required as of now
+    const CMS_Page_Type = "TOP";
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.page) || 10;
+
+    const result = await this.cMSPageService.getSchoolPages(
+      id as string,
+      CMS_Section,
+      CMS_Page_Type,
+    );
+    return res
+      .status(StatusCodes.OK)
+      .json(
+        new ApiResponse(
+          StatusCodes.OK,
+          result,
+          API_RESPONSES.SCHOOL_PAGES_FETCHED,
+        ),
+      );
+  });
 }
 
 export default CmsPageController;

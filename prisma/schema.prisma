@@ -31,6 +31,15 @@ enum TargetType {
   NEW
 }
 
+enum ContentBlockType {
+  TITLE
+  PARAGRAPH
+  RICH_TEXT
+  SINGLE_FILE
+  GRID_TITLE
+  MULTIPLE_IMAGE_GRID
+}
+
 model CmsPage {
   cms_id               String              @id @default(uuid())
   cms_page_name        String       
@@ -77,4 +86,24 @@ model School {
   pages       CmsPage[]
   
   @@map("schools")
+}
+
+model PageContentBlock {
+  page_content_block_id           String           @id @default(uuid())
+  cms_page_id                     String           
+  page_content_block_type         ContentBlockType @map("block_type")
+  page_content_block_title        String?          @db.Text
+  page_content_block_content      String?          @db.LongText
+  page_content_block_file_url     String?          @db.Text
+  page_content_block_file_id      String?          
+  page_content_block_sort_order   Int              @default(0) 
+  page_content_block_is_published Boolean          @default(true) 
+  createdAt                       DateTime         @default(now()) @map("created_at")
+  updatedAt                       DateTime         @updatedAt @map("updated_at")
+  page                            CmsPage          @relation(fields: [cms_page_id], references: [cms_id], onDelete: Cascade)
+  @@index([cms_page_id])
+  @@index([page_content_block_type])
+  @@index([page_content_block_file_id])
+  @@index([page_content_block_sort_order])
+  @@map("page_content_blocks")
 }

@@ -1,7 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 import CMSPageRepository from "../repositories/cmspage.repository";
 import { createCMSPagelType, updateCMSPagelType } from "../types/page.type";
-import { API_ERRORS } from "../constants/app.constant";
+import { API_ERRORS, CMS_SECTION } from "../constants/app.constant";
 import { ApiError } from "common-microservices-utils";
 import SchoolRepository from "../repositories/school.repository";
 
@@ -19,7 +19,7 @@ class CMSPageService {
       data.cms_slug,
     );
 
-    if (data.cms_section === "SCHOOL") {
+    if (data.cms_section === CMS_SECTION.SCHOOL) {
       if (data.cms_school_id === null)
         throw new ApiError(
           StatusCodes.BAD_REQUEST,
@@ -75,6 +75,19 @@ class CMSPageService {
 
   getHomePages = async (cms_section: string, cms_page_type: string) => {
     const data = await this.cMSPageRepository.getHomePages(
+      cms_section,
+      cms_page_type,
+    );
+    return data;
+  };
+
+  getSchoolPages = async (
+    school_id: string,
+    cms_section: string,
+    cms_page_type: string,
+  ) => {
+    const data = await this.cMSPageRepository.getSchoolPages(
+      school_id,
       cms_section,
       cms_page_type,
     );

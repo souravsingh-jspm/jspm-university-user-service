@@ -18,4 +18,8 @@ CMSPageRouter.route(API_ENDPOINTS.CMS_HOME_PAGES).get(
   cmsPageController.getHomePages,
 );
 
+CMSPageRouter.route(API_ENDPOINTS.CMS_SCHOOL_PAGES).get(
+  cmsPageController.getSchoolPages,
+);
+
 export default CMSPageRouter;

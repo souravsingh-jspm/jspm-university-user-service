@@ -79,6 +79,35 @@ class CMSPageRepository {
       return { pages, count };
     });
   };
+
+  getSchoolPages = async (
+    school_id: string,
+    cms_section: string,
+    cms_page_type: string,
+  ) => {
+    const where = {
+      cms_school_id: school_id,
+      cms_page_type: "TOP" as any,
+      cms_parent_id: null,
+      cms_is_active: true,
+    };
+
+    return await queryHandler(() =>
+      prisma.cmsPage.findMany({
+        where,
+        include: {
+          children: {
+            include: {
+              children: true,
+            },
+          },
+        },
+        orderBy: {
+          cms_page_order: "asc",
+        },
+      }),
+    );
+  };
 }
 
 export default CMSPageRepository;
