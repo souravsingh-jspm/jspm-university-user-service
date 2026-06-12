@@ -66,6 +66,8 @@ model CmsPage {
   
   school               School?             @relation(fields: [cms_school_id], references: [school_id], onDelete: SetNull)
 
+  pageContentBlocks    PageContentBlock[]  @relation("PageContentBlock")
+  
   @@index([cms_slug])
   @@index([cms_section])
   @@index([cms_school_id])
@@ -100,7 +102,7 @@ model PageContentBlock {
   page_content_block_is_published Boolean          @default(true) 
   createdAt                       DateTime         @default(now()) @map("created_at")
   updatedAt                       DateTime         @updatedAt @map("updated_at")
-  page                            CmsPage          @relation(fields: [cms_page_id], references: [cms_id], onDelete: Cascade)
+  page                            CmsPage          @relation("PageContentBlock", fields: [cms_page_id], references: [cms_id], onDelete: Cascade)
   @@index([cms_page_id])
   @@index([page_content_block_type])
   @@index([page_content_block_file_id])

@@ -11,6 +11,11 @@ export const API_ENDPOINTS = {
   CMS_PAGES: "/pages",
   CMS_HOME_PAGES: "/home-pages",
   CMS_SCHOOL_PAGES: "/school-pages/:id",
+
+  PAGE_CONTENT: "/page-content",
+  PAGE_CONTENT_BY_ID: "/page-content/:id",
+  PAGE_CONTENTS: "/page-contents",
+  PAGE_CONTENT_BY_PAGE_ID: "/page-content-by-page/:id",
 };
 
 export const CMS_SECTION = {
@@ -31,6 +36,12 @@ export const API_RESPONSES = {
   PAGE_FETCHED: "Page fetched successfully",
   PAGES_FETCHED: "Page's fetched successfully",
 
+  PAGE_CONTENT_CREATED: "Page content created successfully",
+  PAGE_CONTENT_DELETED: "Page content deleted successfully",
+  PAGE_CONTENT_UPDATED: "Page content updated successfully",
+  PAGE_CONTENT_FETCHED: "Page content fetched successfully",
+  PAGES_CONTENT_FETCHED: "Page contents fetched successfully",
+
   HOME_PAGE_FETCHED: "Home Page fetched successfully",
   SCHOOL_PAGES_FETCHED: "School Pages fetched successfully",
 };
@@ -47,6 +58,8 @@ export const API_ERRORS = {
   // Pages
   PAGE_SLUG_ERROR: "Page already exits with same slug",
   PAGE_NOT_EXITS: "Page dose not exists",
+  // Page Content
+  PAGE_CONTENT_NOT_FOUND: "Page content block not found",
 
   SEND_PROPER_JSON: "Send a proper JSON data",
 };
