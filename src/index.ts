@@ -7,7 +7,7 @@ import { API_ENDPOINTS, API_ERRORS, PORT } from "./constants/app.constant";
 import SchoolRoutes from "./routes/school.route";
 import CMSPageRouter from "./routes/cmspage.route";
 import PageContentRouter from "./routes/pagecontent.route";
-
+import EventRouter from "./routes/event.route";
 config();
 const app = express();
 const port = parseInt(process.env.PORT || "") || PORT;
@@ -30,6 +30,8 @@ app.use(
 app.use(API_ENDPOINTS.BASE, SchoolRoutes);
 app.use(API_ENDPOINTS.BASE, CMSPageRouter);
 app.use(API_ENDPOINTS.BASE, PageContentRouter);
+app.use(API_ENDPOINTS.BASE, EventRouter);
+app.use(API_ENDPOINTS.BASE, BlogRouter);
 
 app.use((err: ApiError, req: Request, res: Response, next: NextFunction) => {
   console.log(err);

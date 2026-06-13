@@ -16,6 +16,14 @@ export const API_ENDPOINTS = {
   PAGE_CONTENT_BY_ID: "/page-content/:id",
   PAGE_CONTENTS: "/page-contents",
   PAGE_CONTENT_BY_PAGE_ID: "/page-content-by-page/:id",
+
+  EVENT: "/event",
+  EVENT_BY_ID: "/event/:id",
+  EVENTS: "/events",
+
+  BLOG: "/blog",
+  BLOG_BY_ID: "/blog/:id",
+  BLOGS: "/blogs",
 };
 
 export const CMS_SECTION = {
@@ -42,6 +50,18 @@ export const API_RESPONSES = {
   PAGE_CONTENT_FETCHED: "Page content fetched successfully",
   PAGES_CONTENT_FETCHED: "Page contents fetched successfully",
 
+  EVENT_CREATED: "Event created successfully",
+  EVENT_DELETED: "Event deleted successfully",
+  EVENT_UPDATED: "Event updated successfully",
+  EVENT_FETCHED: "Event fetched successfully",
+  EVENTS_FETCHED: "Events fetched successfully",
+
+  BLOG_CREATED: "Blog created successfully",
+  BLOG_DELETED: "Blog deleted successfully",
+  BLOG_UPDATED: "Blog updated successfully",
+  BLOG_FETCHED: "Blog fetched successfully",
+  BLOGS_FETCHED: "Blogs fetched successfully",
+
   HOME_PAGE_FETCHED: "Home Page fetched successfully",
   SCHOOL_PAGES_FETCHED: "School Pages fetched successfully",
 };
@@ -60,6 +80,10 @@ export const API_ERRORS = {
   PAGE_NOT_EXITS: "Page dose not exists",
   // Page Content
   PAGE_CONTENT_NOT_FOUND: "Page content block not found",
+  // Blog
+  BLOG_NOT_FOUND: "Blog not found",
+  //Event
+  EVENT_NOT_FOUND: "Event not found",
 
   SEND_PROPER_JSON: "Send a proper JSON data",
 };

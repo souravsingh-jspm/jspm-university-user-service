@@ -40,6 +40,12 @@ enum ContentBlockType {
   MULTIPLE_IMAGE_GRID
 }
 
+
+enum EventType{
+  HOME
+  SCHOOL
+}
+
 model CmsPage {
   cms_id               String              @id @default(uuid())
   cms_page_name        String       
@@ -84,6 +90,8 @@ model School {
   school_is_active      Boolean          @default(true) @map("is_active") // soft delete school
   createdAt             DateTime         @default(now())  @map("created_at")
   updatedAt             DateTime         @updatedAt       @map("updated_at")
+  BLOGS       BLOGS[]
+  EVENTS      EVENTS[]
   
   pages       CmsPage[]
   
@@ -108,4 +116,37 @@ model PageContentBlock {
   @@index([page_content_block_file_id])
   @@index([page_content_block_sort_order])
   @@map("page_content_blocks")
+}
+
+model EVENTS { 
+  event_id                String           @id @default(uuid())
+  event_title             String?
+  event_image1_file_id    String?
+  event_image2_file_id    String?
+  event_short_description String?          @db.Text
+  event_long_description  String?          @db.LongText
+  event_place             String? 
+  event_type              EventType        @default(HOME)
+  event_school_id               String?
+  event_date              DateTime?
+  school                   School?             @relation(fields: [event_school_id], references: [school_id], onDelete: SetNull)
+  event_is_active         Boolean?          @default(true)
+  createdAt               DateTime         @default(now()) @map("created_at")
+  updatedAt               DateTime         @updatedAt @map("updated_at")
+}
+
+model BLOGS { 
+  blog_id                  String           @id @default(uuid())
+  blog_title               String?
+  blog_image1_file_id      String?
+  blog_image2_file_id      String?
+  blog_short_description   String?          @db.Text
+  blog_long_description    String?          @db.LongText
+  blog_type                EventType        @default(HOME)
+  blog_school_id           String?
+  blog_date                DateTime?
+  school                   School?          @relation(fields: [blog_school_id], references: [school_id], onDelete: SetNull)
+  blog_is_active           Boolean?         @default(true)
+  createdAt                DateTime         @default(now()) @map("created_at")
+  updatedAt                DateTime         @updatedAt @map("updated_at")
 }
