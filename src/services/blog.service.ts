@@ -1,7 +1,6 @@
 import { ApiError } from "common-microservices-utils";
 import { API_ERRORS } from "../constants/app.constant";
 import { createEventType, updateEventType } from "../types/event.type";
-import EventRepository from "../repositories/event.repository";
 import BlogRepository from "../repositories/blog.repository";
 
 class BlogService {

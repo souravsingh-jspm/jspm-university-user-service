@@ -24,6 +24,10 @@ export const API_ENDPOINTS = {
   BLOG: "/blog",
   BLOG_BY_ID: "/blog/:id",
   BLOGS: "/blogs",
+
+  NEWS: "/news",
+  NEWS_BY_ID: "/news/:id",
+  ALL_NEWS: "/all-news",
 };
 
 export const CMS_SECTION = {
@@ -84,6 +88,8 @@ export const API_ERRORS = {
   BLOG_NOT_FOUND: "Blog not found",
   //Event
   EVENT_NOT_FOUND: "Event not found",
+  //News
+  NEWS_NOT_FOUND: "News not found",
 
   SEND_PROPER_JSON: "Send a proper JSON data",
 };

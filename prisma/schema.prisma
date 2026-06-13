@@ -92,6 +92,7 @@ model School {
   updatedAt             DateTime         @updatedAt       @map("updated_at")
   BLOGS       BLOGS[]
   EVENTS      EVENTS[]
+  NEWS        NEWS[]
   
   pages       CmsPage[]
   
@@ -151,4 +152,22 @@ model BLOGS {
   blog_order               Int              @default(0) 
   createdAt                DateTime         @default(now()) @map("created_at")
   updatedAt                DateTime         @updatedAt @map("updated_at")
+}
+
+model NEWS { 
+  news_id                  String           @id @default(uuid())
+  news_title               String?
+  news_image1_file_id      String?
+  news_image2_file_id      String?
+  news_short_description   String?          @db.Text
+  news_long_description    String?          @db.LongText
+  news_type                EventType        @default(HOME)
+  news_school_id           String?
+  news_date                DateTime?
+  school                   School?          @relation(fields: [news_school_id], references: [school_id], onDelete: SetNull)
+  news_is_active           Boolean?         @default(true)
+  news_order               Int              @default(0) 
+  createdAt                DateTime         @default(now()) @map("created_at")
+  updatedAt                DateTime         @updatedAt @map("updated_at")
+  @@map("news")
 }
