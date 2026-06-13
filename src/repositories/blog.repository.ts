@@ -3,8 +3,9 @@ import { queryHandler } from "../utils/helper";
 import { createBlogType, updateBlogType } from "../types/blog.type";
 
 class BlogRepository {
-  async create(blogData: createBlogType) {
-    return await queryHandler(() => prisma.bLOGS.create({ data: blogData }));
+  async create(data: createBlogType) {
+    console.log(data, " in repository");
+    return await queryHandler(() => prisma.bLOGS.create({ data }));
   }
 
   async getById(blog_id: string) {
@@ -13,9 +14,9 @@ class BlogRepository {
     );
   }
 
-  async update(blog_id: string, blogData: updateBlogType) {
+  async update(blog_id: string, data: updateBlogType) {
     return await queryHandler(() =>
-      prisma.bLOGS.update({ where: { blog_id }, data: blogData }),
+      prisma.bLOGS.update({ where: { blog_id }, data }),
     );
   }
 
@@ -27,7 +28,7 @@ class BlogRepository {
 
   async getAll(page: number, limit: number) {
     return await queryHandler(async () => {
-      const [events, count] = await Promise.all([
+      const [data, count] = await Promise.all([
         prisma.bLOGS.findMany({
           skip: (page - 1) * limit,
           take: limit,
@@ -36,7 +37,7 @@ class BlogRepository {
         prisma.bLOGS.count(),
       ]);
       return {
-        events,
+        data,
         count,
       };
     });

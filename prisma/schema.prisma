@@ -127,10 +127,11 @@ model EVENTS {
   event_long_description  String?          @db.LongText
   event_place             String? 
   event_type              EventType        @default(HOME)
-  event_school_id               String?
+  event_school_id         String?
   event_date              DateTime?
-  school                   School?             @relation(fields: [event_school_id], references: [school_id], onDelete: SetNull)
-  event_is_active         Boolean?          @default(true)
+  event_order             Int              @default(0) 
+  school                  School?          @relation(fields: [event_school_id], references: [school_id], onDelete: SetNull)
+  event_is_active         Boolean?         @default(true)
   createdAt               DateTime         @default(now()) @map("created_at")
   updatedAt               DateTime         @updatedAt @map("updated_at")
 }
@@ -147,6 +148,7 @@ model BLOGS {
   blog_date                DateTime?
   school                   School?          @relation(fields: [blog_school_id], references: [school_id], onDelete: SetNull)
   blog_is_active           Boolean?         @default(true)
+  blog_order               Int              @default(0) 
   createdAt                DateTime         @default(now()) @map("created_at")
   updatedAt                DateTime         @updatedAt @map("updated_at")
 }

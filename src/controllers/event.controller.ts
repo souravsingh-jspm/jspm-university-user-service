@@ -2,6 +2,7 @@ import { ApiResponse, asyncHandler } from "common-microservices-utils";
 import { API_RESPONSES } from "../constants/app.constant";
 import EventService from "../services/event.service";
 import { StatusCodes } from "http-status-codes";
+import { getPagination } from "../utils/pagination";
 class EventController {
   eventService: EventService;
   constructor() {
@@ -9,7 +10,7 @@ class EventController {
   }
 
   create = asyncHandler(async (req, res) => {
-    const { data } = req.body;
+    const data = req.body;
     const result = await this.eventService.create(data);
     return res
       .status(StatusCodes.CREATED)
@@ -23,7 +24,7 @@ class EventController {
   });
   update = asyncHandler(async (req, res) => {
     const { id } = req.params;
-    const { data } = req.body;
+    const data = req.body;
     const result = await this.eventService.update(id as string, data);
     return res
       .status(StatusCodes.OK)
@@ -50,13 +51,20 @@ class EventController {
       );
   });
   getAll = asyncHandler(async (req, res) => {
-    const { page, limit } = req.query;
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+
     const result = await this.eventService.getAll(Number(page), Number(limit));
-    return res
-      .status(StatusCodes.OK)
-      .json(
-        new ApiResponse(StatusCodes.OK, result, API_RESPONSES.EVENTS_FETCHED),
-      );
+    return res.status(StatusCodes.OK).json(
+      new ApiResponse(
+        StatusCodes.OK,
+        {
+          data: result.data,
+          pagination: getPagination(page, limit, result.count),
+        },
+        API_RESPONSES.EVENTS_FETCHED,
+      ),
+    );
   });
 }
 

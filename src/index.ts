@@ -8,6 +8,7 @@ import SchoolRoutes from "./routes/school.route";
 import CMSPageRouter from "./routes/cmspage.route";
 import PageContentRouter from "./routes/pagecontent.route";
 import EventRouter from "./routes/event.route";
+import BlogRouter from "./routes/blogroutet";
 config();
 const app = express();
 const port = parseInt(process.env.PORT || "") || PORT;

@@ -22,7 +22,7 @@ class EventRepository {
   };
   getAll = async (page: number, limit: number) => {
     return await queryHandler(async () => {
-      const [events, count] = await Promise.all([
+      const [data, count] = await Promise.all([
         prisma.eVENTS.findMany({
           skip: (page - 1) * limit,
           take: limit,
@@ -31,7 +31,7 @@ class EventRepository {
         prisma.eVENTS.count(),
       ]);
       return {
-        events,
+        data,
         count,
       };
     });

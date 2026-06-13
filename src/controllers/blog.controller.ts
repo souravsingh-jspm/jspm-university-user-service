@@ -2,6 +2,7 @@ import { ApiResponse, asyncHandler } from "common-microservices-utils";
 import { API_RESPONSES } from "../constants/app.constant";
 import BlogService from "../services/blog.service";
 import { StatusCodes } from "http-status-codes";
+import { getPagination } from "../utils/pagination";
 class BlogController {
   blogService: BlogService;
   constructor() {
@@ -9,7 +10,9 @@ class BlogController {
   }
 
   create = asyncHandler(async (req, res) => {
-    const { data } = req.body;
+    console.log(req.body);
+    const data = req.body;
+    console.log(data, " here is result");
     const result = await this.blogService.create(data);
     return res
       .status(StatusCodes.CREATED)
@@ -23,7 +26,7 @@ class BlogController {
   });
   update = asyncHandler(async (req, res) => {
     const { id } = req.params;
-    const { data } = req.body;
+    const data = req.body;
     const result = await this.blogService.update(id as string, data);
     return res
       .status(StatusCodes.OK)
@@ -50,13 +53,20 @@ class BlogController {
       );
   });
   getAll = asyncHandler(async (req, res) => {
-    const { page, limit } = req.query;
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+
     const result = await this.blogService.getAll(Number(page), Number(limit));
-    return res
-      .status(StatusCodes.OK)
-      .json(
-        new ApiResponse(StatusCodes.OK, result, API_RESPONSES.BLOGS_FETCHED),
-      );
+    return res.status(StatusCodes.OK).json(
+      new ApiResponse(
+        StatusCodes.OK,
+        {
+          data: result.data,
+          pagination: getPagination(page, limit, result.count),
+        },
+        API_RESPONSES.BLOGS_FETCHED,
+      ),
+    );
   });
 }
 
