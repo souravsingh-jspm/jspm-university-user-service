@@ -82,18 +82,36 @@ model CmsPage {
   @@map("cms_pages")
 }
 
+model Faculty { 
+  faculty_id           String  @id @default(uuid())
+  faculty_name         String  
+  faculty_file_id      String?
+  faculty_sequance     Int  @default(0)
+  faculty_description  String?
+  facult_is_active     Boolean @default(true)
+  createdAt             DateTime         @default(now())  @map("created_at")
+  updatedAt                       DateTime         @updatedAt @map("updated_at")
+
+  schools              School[]
+
+  @@map("faculties")
+}
+
 model School {
   school_id             String           @id @default(uuid())
   school_name           String           @unique
+  school_file_id        String?
+  school_faculty_id     String?
   school_slug           String           @unique
   school_description    String?          @db.Text
   school_is_active      Boolean          @default(true) @map("is_active") // soft delete school
   createdAt             DateTime         @default(now())  @map("created_at")
   updatedAt             DateTime         @updatedAt       @map("updated_at")
-  BLOGS       BLOGS[]
-  EVENTS      EVENTS[]
-  NEWS        NEWS[]
-  
+  BLOGS                 BLOGS[]
+  EVENTS                EVENTS[]
+  NEWS                  NEWS[]
+  faculty               Faculty?             @relation(fields: [school_faculty_id], references: [faculty_id], onDelete: SetNull)
+
   pages       CmsPage[]
   
   @@map("schools")

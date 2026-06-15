@@ -9,6 +9,9 @@ import CMSPageRouter from "./routes/cmspage.route";
 import PageContentRouter from "./routes/pagecontent.route";
 import EventRouter from "./routes/event.route";
 import BlogRouter from "./routes/blogroutet";
+import NewsRouter from "./routes/news.route";
+import FacultyRouter from "./routes/faculty.route";
+
 config();
 const app = express();
 const port = parseInt(process.env.PORT || "") || PORT;
@@ -33,6 +36,8 @@ app.use(API_ENDPOINTS.BASE, CMSPageRouter);
 app.use(API_ENDPOINTS.BASE, PageContentRouter);
 app.use(API_ENDPOINTS.BASE, EventRouter);
 app.use(API_ENDPOINTS.BASE, BlogRouter);
+app.use(API_ENDPOINTS.BASE, NewsRouter);
+app.use(API_ENDPOINTS.BASE, FacultyRouter);
 
 app.use((err: ApiError, req: Request, res: Response, next: NextFunction) => {
   console.log(err);

@@ -28,6 +28,10 @@ export const API_ENDPOINTS = {
   NEWS: "/news",
   NEWS_BY_ID: "/news/:id",
   ALL_NEWS: "/all-news",
+
+  FACULTY: "/faculty",
+  FACULTY_BY_ID: "/faculty/:id",
+  FACULTIES: "/faculties",
 };
 
 export const CMS_SECTION = {
@@ -66,6 +70,18 @@ export const API_RESPONSES = {
   BLOG_FETCHED: "Blog fetched successfully",
   BLOGS_FETCHED: "Blogs fetched successfully",
 
+  NEWS_CREATED: "News created successfully",
+  NEWS_DELETED: "News deleted successfully",
+  NEWS_UPDATED: "News updated successfully",
+  NEWS_FETCHED: "News fetched successfully",
+  ALL_NEWS_FETCHED: "Newss fetched successfully",
+
+  FACULTY_CREATED: "Faculty created successfully",
+  FACULTY_DELETED: "Faculty deleted successfully",
+  FACULTY_UPDATED: "Faculty updated successfully",
+  FACULTY_FETCHED: "Faculty fetched successfully",
+  ALL_FACULTIES_FETCHED: "All Faculties fetched successfully",
+
   HOME_PAGE_FETCHED: "Home Page fetched successfully",
   SCHOOL_PAGES_FETCHED: "School Pages fetched successfully",
 };
@@ -90,6 +106,9 @@ export const API_ERRORS = {
   EVENT_NOT_FOUND: "Event not found",
   //News
   NEWS_NOT_FOUND: "News not found",
+  //Faculty
+  FACULTY_NOT_FOUND: "Faculty not found",
+  INVAID_FACULTY_ID: "Provide a valid faculty Id",
 
   SEND_PROPER_JSON: "Send a proper JSON data",
 };

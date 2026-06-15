@@ -3,21 +3,30 @@ import { API_ERRORS } from "../constants/app.constant";
 import { StatusCodes } from "http-status-codes";
 import { ApiError } from "common-microservices-utils";
 import { createSchoolType, updateSchoolType } from "../types/school.type";
+import FacultyRepository from "../repositories/faculty.repository";
 
 class SchoolService {
   schoolRepository: SchoolRepository;
+  facultyRepository: FacultyRepository;
 
   constructor() {
     this.schoolRepository = new SchoolRepository();
+    this.facultyRepository = new FacultyRepository();
   }
 
   create = async (data: createSchoolType) => {
+    const checkFacultyExits = await this.facultyRepository.getById(
+      data.school_faculty_id as string,
+    );
     const checkSlugExits = await this.schoolRepository.getBySlug(
       data.school_slug,
     );
     const checkNameExits = await this.schoolRepository.getByName(
       data.school_name,
     );
+
+    if (!checkFacultyExits)
+      throw new ApiError(StatusCodes.BAD_REQUEST, API_ERRORS.INVAID_FACULTY_ID);
 
     if (checkSlugExits && checkNameExits)
       throw new ApiError(

@@ -19,7 +19,7 @@ class NewsController {
         new ApiResponse(
           StatusCodes.CREATED,
           result,
-          API_RESPONSES.BLOG_CREATED,
+          API_RESPONSES.NEWS_CREATED,
         ),
       );
   });
@@ -30,7 +30,7 @@ class NewsController {
     return res
       .status(StatusCodes.OK)
       .json(
-        new ApiResponse(StatusCodes.OK, result, API_RESPONSES.BLOG_UPDATED),
+        new ApiResponse(StatusCodes.OK, result, API_RESPONSES.NEWS_UPDATED),
       );
   });
   getById = asyncHandler(async (req, res) => {
@@ -39,7 +39,7 @@ class NewsController {
     return res
       .status(StatusCodes.OK)
       .json(
-        new ApiResponse(StatusCodes.OK, result, API_RESPONSES.BLOG_FETCHED),
+        new ApiResponse(StatusCodes.OK, result, API_RESPONSES.NEWS_FETCHED),
       );
   });
   delete = asyncHandler(async (req, res) => {
@@ -48,7 +48,7 @@ class NewsController {
     return res
       .status(StatusCodes.OK)
       .json(
-        new ApiResponse(StatusCodes.OK, result, API_RESPONSES.BLOG_DELETED),
+        new ApiResponse(StatusCodes.OK, result, API_RESPONSES.NEWS_DELETED),
       );
   });
   getAll = asyncHandler(async (req, res) => {
@@ -63,7 +63,7 @@ class NewsController {
           data: result.data,
           pagination: getPagination(page, limit, result.count),
         },
-        API_RESPONSES.BLOGS_FETCHED,
+        API_RESPONSES.ALL_NEWS_FETCHED,
       ),
     );
   });
