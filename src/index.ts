@@ -11,6 +11,8 @@ import EventRouter from "./routes/event.route";
 import BlogRouter from "./routes/blogroutet";
 import NewsRouter from "./routes/news.route";
 import FacultyRouter from "./routes/faculty.route";
+import ContactRouter from "./routes/contact.route";
+import ProgramRouter from "./routes/program.route";
 
 config();
 const app = express();
@@ -38,6 +40,8 @@ app.use(API_ENDPOINTS.BASE, EventRouter);
 app.use(API_ENDPOINTS.BASE, BlogRouter);
 app.use(API_ENDPOINTS.BASE, NewsRouter);
 app.use(API_ENDPOINTS.BASE, FacultyRouter);
+app.use(API_ENDPOINTS.BASE, ContactRouter);
+app.use(API_ENDPOINTS.BASE, ProgramRouter);
 
 app.use((err: ApiError, req: Request, res: Response, next: NextFunction) => {
   console.log(err);

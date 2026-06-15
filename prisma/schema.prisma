@@ -46,6 +46,15 @@ enum EventType{
   SCHOOL
 }
 
+enum ProgramType {
+  UNDER_GRADUATION_PROGRAMS
+  POST_GRADUATE
+  INTEGRATED
+  POST_DIPLOMA
+  POST_GRADUATE_DIPLOMA
+  CERTIFICATE
+}
+
 model CmsPage {
   cms_id               String              @id @default(uuid())
   cms_page_name        String       
@@ -112,9 +121,45 @@ model School {
   NEWS                  NEWS[]
   faculty               Faculty?             @relation(fields: [school_faculty_id], references: [faculty_id], onDelete: SetNull)
 
-  pages       CmsPage[]
+  pages                 CmsPage[]
+  programs              Program[]
+
   
   @@map("schools")
+}
+
+model Program {
+  program_id             String           @id @default(uuid())
+  program_school_id      String?         
+  program_select_type    ProgramType
+  program_duration       String?
+  program_fee_per_year   String?
+  program_eligibility    String?
+  program_intake         String?
+  program_is_active      Boolean            @default(true)
+  program_sequance       Int                @default(0)
+
+  contacts               Contact[]
+
+  schools                School?             @relation(fields: [program_school_id], references: [school_id], onDelete: SetNull)
+  
+  @@map("programs")
+}
+
+model Contact { 
+    contact_id          String    @id @default(uuid())
+    contact_name        String?
+    contact_phone       String?
+    contact_email       String?
+    contact_level       String? 
+    contact_program_id  String?
+    contanct_message    String?
+    contact_authorize   Boolean   @default(true)
+    
+
+    programs            Program?  @relation(fields: [contact_program_id], references: [program_id], onDelete: SetNull)
+
+    @@map("contact")
 }
 
 model PageContentBlock {

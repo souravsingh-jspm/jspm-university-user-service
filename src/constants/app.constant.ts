@@ -32,6 +32,14 @@ export const API_ENDPOINTS = {
   FACULTY: "/faculty",
   FACULTY_BY_ID: "/faculty/:id",
   FACULTIES: "/faculties",
+
+  CONTACT: "/contact",
+  CONTACT_BY_ID: "/contact/:id",
+  CONTACTS: "/contacts",
+
+  PROGRAM: "/program",
+  PROGRAM_BY_ID: "/program/:id",
+  PROGRAMS: "/programs",
 };
 
 export const CMS_SECTION = {
@@ -82,6 +90,18 @@ export const API_RESPONSES = {
   FACULTY_FETCHED: "Faculty fetched successfully",
   ALL_FACULTIES_FETCHED: "All Faculties fetched successfully",
 
+  CONTACT_CREATED: "Contact created successfully",
+  CONTACT_DELETED: "Contact deleted successfully",
+  CONTACT_UPDATED: "Contact updated successfully",
+  CONTACT_FETCHED: "Contact fetched successfully",
+  ALL_CONTACT_FETCHED: "All contacts fetched successfully",
+
+  PROGRAMS_CREATED: "Program created successfully",
+  PROGRAMS_DELETED: "Program deleted successfully",
+  PROGRAMS_UPDATED: "Program updated successfully",
+  PROGRAMS_FETCHED: "Program fetched successfully",
+  ALL_PROGRAMS_FETCHED: "All Programs fetched successfully",
+
   HOME_PAGE_FETCHED: "Home Page fetched successfully",
   SCHOOL_PAGES_FETCHED: "School Pages fetched successfully",
 };
@@ -109,6 +129,10 @@ export const API_ERRORS = {
   //Faculty
   FACULTY_NOT_FOUND: "Faculty not found",
   INVAID_FACULTY_ID: "Provide a valid faculty Id",
+  //Programs
+  PROGRAM_NOT_FOUND: "Program not found",
+  //Contact
+  CONTACT_NOT_FOUND: "Contact not found",
 
   SEND_PROPER_JSON: "Send a proper JSON data",
 };
