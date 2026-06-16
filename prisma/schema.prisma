@@ -47,7 +47,7 @@ enum EventType{
 }
 
 enum ProgramType {
-  UNDER_GRADUATION_PROGRAMS
+  UNDER_GRADUATION
   POST_GRADUATE
   INTEGRATED
   POST_DIPLOMA
@@ -151,11 +151,10 @@ model Contact {
     contact_name        String?
     contact_phone       String?
     contact_email       String?
-    contact_level       String? 
+    contact_level       ProgramType? 
     contact_program_id  String?
     contanct_message    String?
     contact_authorize   Boolean   @default(true)
-    
 
     programs            Program?  @relation(fields: [contact_program_id], references: [program_id], onDelete: SetNull)
 

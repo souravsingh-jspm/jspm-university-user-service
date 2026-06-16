@@ -8,7 +8,7 @@ const programController = new ProgramController();
 ProgramRouter.route(API_ENDPOINTS.PROGRAM).post(programController.create);
 
 ProgramRouter.route(API_ENDPOINTS.PROGRAM_BY_ID)
-  .post(programController.getById)
+  .get(programController.getById)
   .put(programController.update)
   .delete(programController.delete);
 

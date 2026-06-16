@@ -25,14 +25,14 @@ class ContactRepository {
     );
   };
 
-  getAll = async (page: number, skip: number) => {
-    const take = (page - 1) * skip;
+  getAll = async (page: number, limit: number) => {
+    const skip = (page - 1) * limit;
 
     return await queryHandler(async () => {
       const [data, count] = await Promise.all([
         prisma.contact.findMany({
-          take,
           skip,
+          take: limit,
         }),
         prisma.contact.count(),
       ]);

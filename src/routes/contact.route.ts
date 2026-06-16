@@ -8,7 +8,7 @@ const contactController = new ContactController();
 ContactRouter.route(API_ENDPOINTS.CONTACT).post(contactController.create);
 
 ContactRouter.route(API_ENDPOINTS.CONTACT_BY_ID)
-  .post(contactController.getById)
+  .get(contactController.getById)
   .put(contactController.update)
   .delete(contactController.delete);
 

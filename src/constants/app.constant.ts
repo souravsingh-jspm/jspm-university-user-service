@@ -115,12 +115,12 @@ export const API_ERRORS = {
   NAME_ERROR: "School already exists with same name",
   MANDATORY_SCHOOL_ID: "School Id is manadatory",
   INVALID_SCHOOL_ID: "Provide vaild school Id",
-  // Pages
+  //Pages
   PAGE_SLUG_ERROR: "Page already exits with same slug",
   PAGE_NOT_EXITS: "Page dose not exists",
-  // Page Content
+  //Page Content
   PAGE_CONTENT_NOT_FOUND: "Page content block not found",
-  // Blog
+  //Blog
   BLOG_NOT_FOUND: "Blog not found",
   //Event
   EVENT_NOT_FOUND: "Event not found",

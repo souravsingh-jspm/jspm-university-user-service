@@ -50,6 +50,7 @@ class ProgramService {
   };
   getAll = async (page: number, limit: number) => {
     const events = await this.programRepository.getAll(page, limit);
+    console.log(events, " here is events");
     return events;
   };
 }
