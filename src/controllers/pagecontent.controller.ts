@@ -25,8 +25,13 @@ class PageContentController {
 
   update = asyncHandler(async (req, res) => {
     const { id } = req.params;
+    const { content_id } = req.query;
     const data = req.body;
-    const response = await this.pageContentService.update(id as string, data);
+    const response = await this.pageContentService.update(
+      id as string,
+      content_id as string,
+      data,
+    );
     res
       .status(StatusCodes.OK)
       .json(
@@ -90,6 +95,24 @@ class PageContentController {
           StatusCodes.OK,
           response,
           API_RESPONSES.PAGE_CONTENT_FETCHED,
+        ),
+      );
+  });
+
+  getContentByPageId = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+
+    const response = await this.pageContentService.getContentByPageId(
+      id as string,
+    );
+
+    return res
+      .status(StatusCodes.OK)
+      .json(
+        new ApiResponse(
+          StatusCodes.OK,
+          response,
+          API_RESPONSES.PAGES_CONTENT_FETCHED,
         ),
       );
   });

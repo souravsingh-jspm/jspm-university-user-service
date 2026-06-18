@@ -39,6 +39,7 @@ class PageContentRepository {
         prisma.pageContentBlock.findMany({
           skip: (page - 1) * limit,
           take: limit,
+          orderBy: { page_content_block_sort_order: "asc" },
         }),
         prisma.pageContentBlock.count(),
       ]);
@@ -53,6 +54,23 @@ class PageContentRepository {
       prisma.pageContentBlock.findMany({
         where: { cms_page_id },
         orderBy: { page_content_block_sort_order: "asc" },
+      }),
+    );
+  };
+
+  getContentByPageId = async (cms_page_id: string) => {
+    return await queryHandler(() =>
+      prisma.pageContentBlock.findMany({
+        where: {
+          cms_page_id,
+        },
+        orderBy: { page_content_block_sort_order: "asc" },
+        include: {
+          titles: true,
+          paragraph: true,
+          richTextEditor: true,
+          subHeading: true,
+        },
       }),
     );
   };

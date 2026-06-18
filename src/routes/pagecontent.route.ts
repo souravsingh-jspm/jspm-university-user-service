@@ -24,4 +24,8 @@ PageContentRouter.route(API_ENDPOINTS.PAGE_CONTENT_BY_PAGE_ID).get(
   pageContentController.getByPageId,
 );
 
+PageContentRouter.route(API_ENDPOINTS.PAGE_CONTENT_BY_CMS_ID).get(
+  pageContentController.getContentByPageId,
+);
+
 export default PageContentRouter;

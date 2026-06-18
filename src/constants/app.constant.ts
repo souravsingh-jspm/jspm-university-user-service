@@ -16,6 +16,7 @@ export const API_ENDPOINTS = {
   PAGE_CONTENT_BY_ID: "/page-content/:id",
   PAGE_CONTENTS: "/page-contents",
   PAGE_CONTENT_BY_PAGE_ID: "/page-content-by-page/:id",
+  PAGE_CONTENT_BY_CMS_ID: "/page-contents-id/:id",
 
   EVENT: "/event",
   EVENT_BY_ID: "/event/:id",

@@ -33,6 +33,7 @@ enum TargetType {
 
 enum ContentBlockType {
   TITLE
+  SUBHEADING
   PARAGRAPH
   RICH_TEXT
   SINGLE_FILE
@@ -161,25 +162,7 @@ model Contact {
     @@map("contact")
 }
 
-model PageContentBlock {
-  page_content_block_id           String           @id @default(uuid())
-  cms_page_id                     String           
-  page_content_block_type         ContentBlockType @map("block_type")
-  page_content_block_title        String?          @db.Text
-  page_content_block_content      String?          @db.LongText
-  page_content_block_file_url     String?          @db.Text
-  page_content_block_file_id      String?          
-  page_content_block_sort_order   Int              @default(0) 
-  page_content_block_is_published Boolean          @default(true) 
-  createdAt                       DateTime         @default(now()) @map("created_at")
-  updatedAt                       DateTime         @updatedAt @map("updated_at")
-  page                            CmsPage          @relation("PageContentBlock", fields: [cms_page_id], references: [cms_id], onDelete: Cascade)
-  @@index([cms_page_id])
-  @@index([page_content_block_type])
-  @@index([page_content_block_file_id])
-  @@index([page_content_block_sort_order])
-  @@map("page_content_blocks")
-}
+
 
 model EVENTS { 
   event_id                String           @id @default(uuid())
@@ -232,4 +215,70 @@ model NEWS {
   createdAt                DateTime         @default(now()) @map("created_at")
   updatedAt                DateTime         @updatedAt @map("updated_at")
   @@map("news")
+}
+
+model PageContentBlock {
+  page_content_block_id           String           @id @default(uuid())
+  cms_page_id                     String
+  page_content_block_type         ContentBlockType @map("block_type")
+  page_content_block_sort_order   Int              @default(0)
+  page_content_block_is_published Boolean          @default(true)
+  createdAt                       DateTime         @default(now()) @map("created_at")
+  updatedAt                       DateTime         @updatedAt @map("updated_at")
+
+  page                            CmsPage          @relation("PageContentBlock", fields: [cms_page_id], references: [cms_id], onDelete: Cascade)
+
+  titles                          Title[]          @relation("PageContentBlockTitles")
+  subHeading                      SubHeading[]     @relation("PageContentBlockSubHeading")
+  richTextEditor                  RichTextEditor[] @relation("PageContentRichTextEditor")
+  paragraph                       Paragraph[]      @relation("PageContentParagraph")
+
+  @@index([cms_page_id])
+  @@index([page_content_block_type])
+  @@index([page_content_block_sort_order])
+  @@map("page_content_blocks")
+}
+
+model Title {
+  title_id               String            @id @default(uuid())
+  content_block_id       String?
+  title_description      String?
+
+  pageContentBlock       PageContentBlock? @relation("PageContentBlockTitles", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
+
+  @@index([content_block_id])
+  @@map("titles")
+}
+
+model SubHeading {
+  subheading_id               String            @id @default(uuid())
+  content_block_id            String?
+  subheading_description      String?
+
+  pageContentBlock            PageContentBlock? @relation("PageContentBlockSubHeading", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
+
+  @@index([content_block_id])
+  @@map("subheading")
+}
+
+model RichTextEditor {
+  rich_text_editor_id               String            @id @default(uuid())
+  content_block_id                   String?
+  rich_text_editor_description      String?           @db.LongText
+
+  pageContentBlock            PageContentBlock? @relation("PageContentRichTextEditor", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
+
+  @@index([content_block_id])
+  @@map("richtexteditor")
+}
+
+model Paragraph {
+  paragraph_id      String      @id @default(uuid())
+  content_block_id String?
+  paragraph_description      String?           @db.LongText
+
+  pageContentBlock            PageContentBlock? @relation("PageContentParagraph", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
+
+  @@index([content_block_id])
+  @@map("paragraph")
 }
