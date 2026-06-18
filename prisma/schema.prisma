@@ -218,21 +218,25 @@ model NEWS {
 }
 
 model PageContentBlock {
-  page_content_block_id           String           @id @default(uuid())
+  page_content_block_id           String              @id @default(uuid())
   cms_page_id                     String
-  page_content_block_type         ContentBlockType @map("block_type")
-  page_content_block_sort_order   Int              @default(0)
-  page_content_block_is_published Boolean          @default(true)
-  createdAt                       DateTime         @default(now()) @map("created_at")
-  updatedAt                       DateTime         @updatedAt @map("updated_at")
+  page_content_block_type         ContentBlockType    @map("block_type")
+  page_content_block_sort_order   Int                 @default(0)
+  page_content_block_is_published Boolean             @default(true)
+  createdAt                       DateTime            @default(now()) @map("created_at")
+  updatedAt                       DateTime            @updatedAt @map("updated_at")
 
-  page                            CmsPage          @relation("PageContentBlock", fields: [cms_page_id], references: [cms_id], onDelete: Cascade)
+  page                            CmsPage             @relation("PageContentBlock", fields: [cms_page_id], references: [cms_id], onDelete: Cascade)
 
-  titles                          Title[]          @relation("PageContentBlockTitles")
-  subHeading                      SubHeading[]     @relation("PageContentBlockSubHeading")
-  richTextEditor                  RichTextEditor[] @relation("PageContentRichTextEditor")
-  paragraph                       Paragraph[]      @relation("PageContentParagraph")
-
+  titles                          Title[]             @relation("PageContentBlockTitles")
+  subHeading                      SubHeading[]        @relation("PageContentBlockSubHeading")
+  richTextEditor                  RichTextEditor[]    @relation("PageContentRichTextEditor")
+  paragraph                       Paragraph[]         @relation("PageContentParagraph")
+  BasicCard                       BasicCard[]         @relation("PageContentBasicCard")
+  programImageCard                ProgramImageCard[]  @relation("PageContentProgramImageCard")
+  imagecard                       ImageCard[]         @relation("ImageCard")
+  testimonialAccordian            TestimonialAccordian[] @relation("TestimonialAccordian")
+  marquee                         Marquee[]           @relation("Marquee")
   @@index([cms_page_id])
   @@index([page_content_block_type])
   @@index([page_content_block_sort_order])
@@ -246,6 +250,9 @@ model Title {
 
   pageContentBlock       PageContentBlock? @relation("PageContentBlockTitles", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
 
+  createdAt                DateTime         @default(now()) @map("created_at")
+  updatedAt                DateTime          @default(now()) @updatedAt @map("updated_at")
+
   @@index([content_block_id])
   @@map("titles")
 }
@@ -257,6 +264,9 @@ model SubHeading {
 
   pageContentBlock            PageContentBlock? @relation("PageContentBlockSubHeading", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
 
+  createdAt                DateTime         @default(now()) @map("created_at")
+  updatedAt                DateTime         @default(now())  @updatedAt @map("updated_at")
+
   @@index([content_block_id])
   @@map("subheading")
 }
@@ -267,7 +277,10 @@ model RichTextEditor {
   rich_text_editor_description      String?           @db.LongText
 
   pageContentBlock            PageContentBlock? @relation("PageContentRichTextEditor", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
-
+  
+  createdAt                DateTime         @default(now()) @map("created_at")
+  updatedAt                DateTime          @default(now()) @updatedAt @map("updated_at")
+  
   @@index([content_block_id])
   @@map("richtexteditor")
 }
@@ -279,6 +292,94 @@ model Paragraph {
 
   pageContentBlock            PageContentBlock? @relation("PageContentParagraph", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
 
+  createdAt                DateTime         @default(now()) @map("created_at")
+  updatedAt                DateTime          @default(now()) @updatedAt @map("updated_at")
+
   @@index([content_block_id])
   @@map("paragraph")
+}
+
+model BasicCard{
+  basic_card_id                          String      @id @default(uuid())
+  content_block_id                       String?
+  basic_card_title                       String?
+  basic_card_description                 String?
+  basic_card_link                        String?
+  basic_card_label                       String?
+  basic_card_color                       String?
+
+  pageContentBlock            PageContentBlock? @relation("PageContentBasicCard", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
+    
+  createdAt                DateTime         @default(now()) @map("created_at")
+  updatedAt                DateTime         @default(now())  @updatedAt @map("updated_at")
+
+  @@index([content_block_id])
+  @@map("basiccard")
+}
+
+model ProgramImageCard{
+  program_image_card_id                          String      @id @default(uuid())
+  content_block_id                       String?
+  program_image_card_title                       String?
+  program_image_card_description                 String?
+  program_image_card_link                        String?
+  program_image_card_label                       String?
+  program_image_card_color                       String?
+
+  pageContentBlock            PageContentBlock? @relation("PageContentProgramImageCard", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
+    
+  createdAt                DateTime         @default(now()) @map("created_at")
+  updatedAt                DateTime         @default(now())  @updatedAt @map("updated_at")
+
+  @@index([content_block_id])
+  @@map("programimagecard")
+}
+
+model ImageCard{
+  image_card_id                          String      @id @default(uuid())
+  content_block_id                       String?
+  image_card_title                       String?
+  image_card_description                 String?
+  image_card_link                        String?
+  image_card_label                       String?
+  image_card_color                       String?
+
+  pageContentBlock            PageContentBlock? @relation("ImageCard", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
+    
+  createdAt                DateTime         @default(now()) @map("created_at")
+  updatedAt                DateTime          @default(now()) @updatedAt @map("updated_at")
+
+  @@index([content_block_id])
+  @@map("imagecard")
+}
+
+model TestimonialAccordian{
+  testimonial_accordian_id                          String      @id @default(uuid())
+  content_block_id                                  String?
+  testimonial_accordian_student_name                String?
+  testimonial_accordian_description                 String?
+  testimonial_accordian_image                       String?
+
+  pageContentBlock            PageContentBlock? @relation("TestimonialAccordian", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
+    
+  createdAt                DateTime         @default(now()) @map("created_at")
+  updatedAt                DateTime          @default(now()) @updatedAt @map("updated_at")
+
+  @@index([content_block_id])
+  @@map("testimonialAccordian")
+}
+
+model Marquee{
+  marquee_id          String        @id @default(uuid())
+  content_block_id    String?
+  marquee_text        String?
+  marquee_element     String?
+
+  pageContentBlock    PageContentBlock? @relation("Marquee", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
+
+  createdAt                DateTime         @default(now()) @map("created_at")
+  updatedAt                DateTime          @default(now()) @updatedAt @map("updated_at")
+
+  @@index([content_block_id])
+  @@map("marquee")
 }

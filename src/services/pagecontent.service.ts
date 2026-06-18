@@ -7,6 +7,11 @@ import SubHeadingRepository from "../repositories/subheading.repository";
 import RichTextEditorRepository from "../repositories/richtexteditor.repository";
 import ParagraphRepository from "../repositories/paragraph.repository";
 import { ContentBlockType } from "@prisma/client";
+import BasicCardRepository from "../repositories/bascicard.repository";
+import ImageCardRepository from "../repositories/imagecard.repository";
+import MarqueeRepository from "../repositories/marquee.repository";
+import ProgramImageCardRepository from "../repositories/programimagecard.repository";
+import TestimonialAccordianRepository from "../repositories/testimonialaccordian.repository";
 
 class PageContentService {
   pageContentRepository: PageContentRepository;
@@ -14,12 +19,23 @@ class PageContentService {
   subHeadingRepository: SubHeadingRepository;
   richTextEditorRepository: RichTextEditorRepository;
   paragraphRepository: ParagraphRepository;
+  basicCardRepository: BasicCardRepository;
+  imageCardRepository: ImageCardRepository;
+  marqueeRepository: MarqueeRepository;
+  programImageCardRepository: ProgramImageCardRepository;
+  testimonialAccordianRepository: TestimonialAccordianRepository;
+
   constructor() {
     this.pageContentRepository = new PageContentRepository();
     this.titleRepository = new TitleRepository();
     this.subHeadingRepository = new SubHeadingRepository();
     this.richTextEditorRepository = new RichTextEditorRepository();
     this.paragraphRepository = new ParagraphRepository();
+    this.basicCardRepository = new BasicCardRepository();
+    this.imageCardRepository = new ImageCardRepository();
+    this.marqueeRepository = new MarqueeRepository();
+    this.programImageCardRepository = new ProgramImageCardRepository();
+    this.testimonialAccordianRepository = new TestimonialAccordianRepository();
   }
 
   create = async (data: any) => {
