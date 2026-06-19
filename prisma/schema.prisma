@@ -36,9 +36,11 @@ enum ContentBlockType {
   SUBHEADING
   PARAGRAPH
   RICH_TEXT
-  SINGLE_FILE
-  GRID_TITLE
-  MULTIPLE_IMAGE_GRID
+  BASIC_CARD
+  PROGRAM_IMAGE_CARD
+  IMAGE_CARD
+  TESTIMONIAL_ACCORDIAN
+  MARQUEE
 }
 
 
@@ -232,7 +234,7 @@ model PageContentBlock {
   subHeading                      SubHeading[]        @relation("PageContentBlockSubHeading")
   richTextEditor                  RichTextEditor[]    @relation("PageContentRichTextEditor")
   paragraph                       Paragraph[]         @relation("PageContentParagraph")
-  BasicCard                       BasicCard[]         @relation("PageContentBasicCard")
+  basicCard                       BasicCard[]         @relation("PageContentBasicCard")
   programImageCard                ProgramImageCard[]  @relation("PageContentProgramImageCard")
   imagecard                       ImageCard[]         @relation("ImageCard")
   testimonialAccordian            TestimonialAccordian[] @relation("TestimonialAccordian")
@@ -307,6 +309,7 @@ model BasicCard{
   basic_card_link                        String?
   basic_card_label                       String?
   basic_card_color                       String?
+  basic_card_order                       Int         @default(0)
 
   pageContentBlock            PageContentBlock? @relation("PageContentBasicCard", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
     
@@ -319,7 +322,7 @@ model BasicCard{
 
 model ProgramImageCard{
   program_image_card_id                          String      @id @default(uuid())
-  content_block_id                       String?
+  content_block_id                               String?
   program_image_card_title                       String?
   program_image_card_description                 String?
   program_image_card_link                        String?

@@ -24,6 +24,12 @@ class TitleRepository {
     );
   };
 
+  async deleteByContentBlockId(content_block_id: string) {
+    return await queryHandler(() =>
+      prisma.title.deleteMany({ where: { content_block_id } }),
+    );
+  }
+
   getAll = async (page: number, limit: number) => {
     const skip = (page - 1) * limit;
 

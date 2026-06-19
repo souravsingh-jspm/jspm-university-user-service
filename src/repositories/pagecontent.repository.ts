@@ -70,6 +70,11 @@ class PageContentRepository {
           paragraph: true,
           richTextEditor: true,
           subHeading: true,
+          basicCard: true,
+          programImageCard: true,
+          imagecard: true,
+          testimonialAccordian: true,
+          marquee: true,
         },
       }),
     );

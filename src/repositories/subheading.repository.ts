@@ -25,6 +25,11 @@ class SubHeadingRepository {
     );
   };
 
+  async deleteByContentBlockId(content_block_id: string) {
+    return await queryHandler(() =>
+      prisma.subHeading.deleteMany({ where: { content_block_id } }),
+    );
+  }
   getAll = async (page: number, limit: number) => {
     const skip = (page - 1) * limit;
 

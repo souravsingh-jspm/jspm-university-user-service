@@ -6,6 +6,14 @@ class BasicCardRepository {
     return await queryHandler(() => prisma.basicCard.create({ data }));
   }
 
+  async createMany(data: any) {
+    return await queryHandler(() =>
+      prisma.basicCard.createMany({
+        data,
+      }),
+    );
+  }
+
   async getById(basic_card_id: string) {
     return await queryHandler(() =>
       prisma.basicCard.findUnique({ where: { basic_card_id } }),
@@ -21,6 +29,12 @@ class BasicCardRepository {
   async delete(basic_card_id: string) {
     return await queryHandler(() =>
       prisma.basicCard.delete({ where: { basic_card_id } }),
+    );
+  }
+
+  async deleteByContentBlockId(content_block_id: string) {
+    return await queryHandler(() =>
+      prisma.basicCard.deleteMany({ where: { content_block_id } }),
     );
   }
 

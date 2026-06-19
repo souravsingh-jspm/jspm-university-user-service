@@ -6,6 +6,14 @@ class ProgramImageCardRepository {
     return await queryHandler(() => prisma.programImageCard.create({ data }));
   }
 
+  async createMany(data: any) {
+    return await queryHandler(() =>
+      prisma.programImageCard.createMany({
+        data,
+      }),
+    );
+  }
+
   async getById(program_image_card_id: string) {
     return await queryHandler(() =>
       prisma.programImageCard.findUnique({ where: { program_image_card_id } }),
@@ -24,6 +32,12 @@ class ProgramImageCardRepository {
   async delete(program_image_card_id: string) {
     return await queryHandler(() =>
       prisma.programImageCard.delete({ where: { program_image_card_id } }),
+    );
+  }
+
+  async deleteByContentBlockId(content_block_id: string) {
+    return await queryHandler(() =>
+      prisma.programImageCard.deleteMany({ where: { content_block_id } }),
     );
   }
 

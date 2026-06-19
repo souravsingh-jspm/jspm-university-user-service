@@ -12,6 +12,12 @@ class ParagraphRepository {
     );
   };
 
+  async deleteByContentBlockId(content_block_id: string) {
+    return await queryHandler(() =>
+      prisma.paragraph.deleteMany({ where: { content_block_id } }),
+    );
+  }
+
   getById = async (paragraph_id: string) => {
     return await queryHandler(() =>
       prisma.paragraph.findUnique({ where: { paragraph_id } }),

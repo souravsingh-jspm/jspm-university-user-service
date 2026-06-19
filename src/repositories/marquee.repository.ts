@@ -6,6 +6,14 @@ class MarqueeRepository {
     return await queryHandler(() => prisma.marquee.create({ data }));
   }
 
+  async createMany(data: any) {
+    return await queryHandler(() =>
+      prisma.marquee.createMany({
+        data,
+      }),
+    );
+  }
+
   async getById(marquee_id: string) {
     return await queryHandler(() =>
       prisma.marquee.findUnique({ where: { marquee_id } }),
@@ -21,6 +29,12 @@ class MarqueeRepository {
   async delete(marquee_id: string) {
     return await queryHandler(() =>
       prisma.marquee.delete({ where: { marquee_id } }),
+    );
+  }
+
+  async deleteByContentBlockId(content_block_id: string) {
+    return await queryHandler(() =>
+      prisma.marquee.deleteMany({ where: { content_block_id } }),
     );
   }
 

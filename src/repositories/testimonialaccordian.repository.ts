@@ -8,6 +8,14 @@ class TestimonialAccordianRepository {
     );
   }
 
+  async createMany(data: any) {
+    return await queryHandler(() =>
+      prisma.testimonialAccordian.createMany({
+        data,
+      }),
+    );
+  }
+
   async getById(testimonial_accordian_id: string) {
     return await queryHandler(() =>
       prisma.testimonialAccordian.findUnique({
@@ -30,6 +38,12 @@ class TestimonialAccordianRepository {
       prisma.testimonialAccordian.delete({
         where: { testimonial_accordian_id },
       }),
+    );
+  }
+
+  async deleteByContentBlockId(content_block_id: string) {
+    return await queryHandler(() =>
+      prisma.testimonialAccordian.deleteMany({ where: { content_block_id } }),
     );
   }
 

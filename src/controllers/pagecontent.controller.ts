@@ -25,13 +25,8 @@ class PageContentController {
 
   update = asyncHandler(async (req, res) => {
     const { id } = req.params;
-    const { content_id } = req.query;
     const data = req.body;
-    const response = await this.pageContentService.update(
-      id as string,
-      content_id as string,
-      data,
-    );
+    const response = await this.pageContentService.update(id as string, data);
     res
       .status(StatusCodes.OK)
       .json(
