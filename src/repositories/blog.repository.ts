@@ -4,7 +4,6 @@ import { createBlogType, updateBlogType } from "../types/blog.type";
 
 class BlogRepository {
   async create(data: createBlogType) {
-    console.log(data, " in repository");
     return await queryHandler(() => prisma.bLOGS.create({ data }));
   }
 

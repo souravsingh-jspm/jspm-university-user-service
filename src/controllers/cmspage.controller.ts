@@ -36,9 +36,7 @@ class CmsPageController {
 
   getById = asyncHandler(async (req, res) => {
     const { id } = req.params;
-    console.log("getting by id", id);
     const result = await this.cMSPageService.getById(id as string);
-    console.log(result);
     return res
       .status(StatusCodes.OK)
       .json(

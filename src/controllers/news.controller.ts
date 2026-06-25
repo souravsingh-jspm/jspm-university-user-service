@@ -10,7 +10,6 @@ class NewsController {
   }
 
   create = asyncHandler(async (req, res) => {
-    console.log(req.body);
     const data = req.body;
     const result = await this.newsService.create(data);
     return res

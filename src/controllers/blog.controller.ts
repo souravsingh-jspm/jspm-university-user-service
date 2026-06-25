@@ -10,9 +10,7 @@ class BlogController {
   }
 
   create = asyncHandler(async (req, res) => {
-    console.log(req.body);
     const data = req.body;
-    console.log(data, " here is result");
     const result = await this.blogService.create(data);
     return res
       .status(StatusCodes.CREATED)
