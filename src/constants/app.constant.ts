@@ -140,8 +140,7 @@ export const API_ERRORS = {
   YOU_DO_NOT_HAVE_PERMISSION: "You don't have permissions for this action",
 };
 
-export const AUTH_SERVICE =
-  "http://localhost:3000/api/auth/.well-known/jwks.json";
+export const AUTH_SERVICE = "http://localhost:3000/auth/.well-known/jwks.json";
 
 export const ROLES = {
   ADMIN: "ADMIN",

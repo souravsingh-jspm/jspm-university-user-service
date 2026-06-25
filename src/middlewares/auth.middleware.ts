@@ -9,7 +9,6 @@ import { GetVerificationKey, expressjwt } from "express-jwt";
 import { expressJwtSecret } from "jwks-rsa";
 import { ApiError } from "common-microservices-utils";
 import { StatusCodes } from "http-status-codes";
-import { Role } from "@prisma/client";
 
 export const authUser = () => {
   return (req: any, res: any, next: NextFunction) => {
@@ -98,6 +97,36 @@ export const auth = () => {
       requestProperty: STRINGS.USER,
     })(req, res, (err: any) => {
       if (err) return next(err);
+      next();
+    });
+  };
+};
+
+export const authorizeAll = (allowedRoles?: string[]) => {
+  return (req: any, res: any, next: NextFunction) => {
+    return expressjwt({
+      secret: expressJwtSecret({
+        jwksUri: AUTH_SERVICE,
+        cache: true,
+        rateLimit: true,
+      }) as GetVerificationKey,
+      algorithms: ["RS256"],
+      requestProperty: STRINGS.USER,
+    })(req, res, (err: any) => {
+      if (err) return next(err);
+
+      if (!allowedRoles || allowedRoles.length === 0) {
+        return next();
+      }
+
+      if (!allowedRoles.includes(req.user?.role)) {
+        return next(
+          new ApiError(
+            StatusCodes.UNAUTHORIZED,
+            API_ERRORS.YOU_DO_NOT_HAVE_PERMISSION,
+          ),
+        );
+      }
       next();
     });
   };
