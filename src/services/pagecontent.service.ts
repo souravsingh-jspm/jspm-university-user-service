@@ -12,6 +12,10 @@ import ImageCardRepository from "../repositories/imagecard.repository";
 import MarqueeRepository from "../repositories/marquee.repository";
 import ProgramImageCardRepository from "../repositories/programimagecard.repository";
 import TestimonialAccordianRepository from "../repositories/testimonialaccordian.repository";
+import ContentProfileRepository from "../repositories/contentprofile.repository";
+import ContentFeatureRepository from "../repositories/contentfeature.repository";
+import ContentFacultyRepository from "../repositories/contentfaculty.repository";
+import ContentContactRepository from "../repositories/contentcontact.repository";
 
 class PageContentService {
   pageContentRepository: PageContentRepository;
@@ -24,9 +28,17 @@ class PageContentService {
   marqueeRepository: MarqueeRepository;
   programImageCardRepository: ProgramImageCardRepository;
   testimonialAccordianRepository: TestimonialAccordianRepository;
+  contentProfileRepository: ContentProfileRepository;
+  contentFeatureRepository: ContentFeatureRepository;
+  contentFacultyRepository: ContentFacultyRepository;
+  contentContactRepository: ContentContactRepository;
 
   constructor() {
     this.pageContentRepository = new PageContentRepository();
+    this.contentProfileRepository = new ContentProfileRepository();
+    this.contentFeatureRepository = new ContentFeatureRepository();
+    this.contentFacultyRepository = new ContentFacultyRepository();
+    this.contentContactRepository = new ContentContactRepository();
     this.titleRepository = new TitleRepository();
     this.subHeadingRepository = new SubHeadingRepository();
     this.richTextEditorRepository = new RichTextEditorRepository();
@@ -120,6 +132,42 @@ class PageContentService {
         )
       : null;
 
+    const content_contact = data.content_contact
+      ? await this.contentContactRepository.createMany(
+          data.content_contact.map((card: any) => ({
+            ...card,
+            content_block_id,
+          })),
+        )
+      : null;
+
+    const content_feature = data.content_contact
+      ? await this.contentFeatureRepository.createMany(
+          data.content_contact.map((card: any) => ({
+            ...card,
+            content_block_id,
+          })),
+        )
+      : null;
+
+    const content_profile = data.content_contact
+      ? await this.contentProfileRepository.createMany(
+          data.content_contact.map((card: any) => ({
+            ...card,
+            content_block_id,
+          })),
+        )
+      : null;
+
+    const content_faculty = data.content_contact
+      ? await this.contentFacultyRepository.createMany(
+          data.content_contact.map((card: any) => ({
+            ...card,
+            content_block_id,
+          })),
+        )
+      : null;
+
     return {
       ...result,
       title,
@@ -131,6 +179,10 @@ class PageContentService {
       testimonial_accordian,
       marquee,
       basic_card,
+      content_contact,
+      content_feature,
+      content_profile,
+      content_faculty,
     };
   };
 
@@ -157,6 +209,7 @@ class PageContentService {
             })
           : null;
         break;
+
       case ContentBlockType.TITLE:
         await this.titleRepository.deleteByContentBlockId(id);
 
@@ -167,7 +220,8 @@ class PageContentService {
             })
           : null;
         break;
-      case ContentBlockType.SUBHEADING:
+
+      case ContentBlockType.SUB_HEADING:
         await this.subHeadingRepository.deleteByContentBlockId(id);
 
         content = data.sub_heading
@@ -177,6 +231,7 @@ class PageContentService {
             })
           : null;
         break;
+
       case ContentBlockType.RICH_TEXT:
         await this.richTextEditorRepository.deleteByContentBlockId(id);
 
@@ -239,12 +294,51 @@ class PageContentService {
           : null;
         break;
 
-      case ContentBlockType.MARQUEE:
-        await this.marqueeRepository.deleteByContentBlockId(id);
+      case ContentBlockType.CONTACT_LIST:
+        await this.contentContactRepository.deleteByContentBlockId(id);
 
-        content = data.marquee?.length
-          ? await this.marqueeRepository.createMany(
-              data.marquee.map((card: any) => ({
+        content = data.content_contact?.length
+          ? await this.contentContactRepository.createMany(
+              data.content_contact.map((card: any) => ({
+                ...card,
+                content_block_id: id,
+              })),
+            )
+          : null;
+        break;
+
+      case ContentBlockType.FEATURE_LIST:
+        await this.contentFeatureRepository.deleteByContentBlockId(id);
+
+        content = data.content_feature?.length
+          ? await this.contentFeatureRepository.createMany(
+              data.content_feature.map((card: any) => ({
+                ...card,
+                content_block_id: id,
+              })),
+            )
+          : null;
+        break;
+
+      case ContentBlockType.PROFILE_LIST:
+        await this.contentProfileRepository.deleteByContentBlockId(id);
+
+        content = data.content_profile?.length
+          ? await this.contentProfileRepository.createMany(
+              data.content_profile.map((card: any) => ({
+                ...card,
+                content_block_id: id,
+              })),
+            )
+          : null;
+        break;
+
+      case ContentBlockType.FACULTY_LIST:
+        await this.contentFacultyRepository.deleteByContentBlockId(id);
+
+        content = data.content_faculty?.length
+          ? await this.contentFacultyRepository.createMany(
+              data.content_faculty.map((card: any) => ({
                 ...card,
                 content_block_id: id,
               })),

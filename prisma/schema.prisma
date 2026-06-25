@@ -7,6 +7,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
+enum Role {
+  USER
+  ADMIN
+  SUPER_ADMIN
+ }
+
 enum PageSection {
   HOME
   SCHOOL
@@ -33,14 +40,20 @@ enum TargetType {
 
 enum ContentBlockType {
   TITLE
-  SUBHEADING
+  SUB_HEADING
   PARAGRAPH
   RICH_TEXT
+  
   BASIC_CARD
   PROGRAM_IMAGE_CARD
   IMAGE_CARD
   TESTIMONIAL_ACCORDIAN
   MARQUEE
+
+  CONTACT_LIST
+  FEATURE_LIST
+  PROFILE_LIST
+  FACULTY_LIST
 }
 
 
@@ -239,6 +252,11 @@ model PageContentBlock {
   imagecard                       ImageCard[]         @relation("ImageCard")
   testimonialAccordian            TestimonialAccordian[] @relation("TestimonialAccordian")
   marquee                         Marquee[]           @relation("Marquee")
+  pageContentContact              PageContentContact[] @relation("PageContentContact")
+  pageContentFeature              PageContentFeature[] @relation ("PageContentFeature")
+  PageContentProfile              PageContentProfile[] @relation("PageContentProfile")
+  PageContentFacultyMember        PageContentFacultyMember[] @relation("PageContentFacultyMember")
+  
   @@index([cms_page_id])
   @@index([page_content_block_type])
   @@index([page_content_block_sort_order])
@@ -385,4 +403,78 @@ model Marquee{
 
   @@index([content_block_id])
   @@map("marquee")
+}
+
+model PageContentContact{
+  page_content_contact_id                    String           @id @default(uuid())
+  content_block_id                           String?
+  page_content_contact_image                 String?
+  page_content_contact_name                  String
+  page_content_contact_position              String?
+  page_content_contact_email                 String?
+  page_content_contact_contact               String?
+  page_content_contact_sort_order            Int      @default(0)
+  page_content_contact_is_active             Boolean  @default(true)
+
+  pageContentBlock                           PageContentBlock? @relation("PageContentContact", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
+
+  createdAt                                  DateTime         @default(now()) @map("created_at")
+  updatedAt                                  DateTime         @default(now())  @updatedAt @map("updated_at")
+}
+
+model PageContentFeature {
+  page_content_feature_id                    String   @id @default(uuid())
+  content_block_id                           String
+  page_content_feature_image                 String?
+  page_content_feature_title                 String
+  page_content_feature_sort_order            Int      @default(0)
+  page_content_feature_is_active             Boolean  @default(true)
+
+  createdAt                                  DateTime @default(now()) @map("created_at")
+  updatedAt                                  DateTime @default(now()) @updatedAt @map("updated_at")
+
+  pageContentBlock                           PageContentBlock? @relation("PageContentFeature", fields: [content_block_id], references: [page_content_block_id], onDelete: Cascade)
+
+  @@index([content_block_id])
+  @@map("page_content_features")
+}
+
+model PageContentProfile {
+  page_content_profile_id                    String   @id @default(uuid())
+  content_block_id                           String
+  page_content_profile_image                 String?
+  page_content_profile_name                  String
+  page_content_profile_designation           String?
+  page_content_profile_sort_order            Int      @default(0)
+  page_content_profile_is_active             Boolean  @default(true)
+
+  createdAt                                  DateTime @default(now()) @map("created_at")
+  updatedAt                                  DateTime @default(now()) @updatedAt @map("updated_at")
+
+  pageContentBlock                           PageContentBlock? @relation("PageContentProfile", fields: [content_block_id], references: [page_content_block_id], onDelete: Cascade)
+
+  @@index([content_block_id])
+  @@map("page_content_profiles")
+}
+
+
+model PageContentFacultyMember {
+  page_content_faculty_member_id                    String   @id @default(uuid())
+  content_block_id                                  String
+  page_content_faculty_member_image                 String?
+  page_content_faculty_member_name                  String
+  page_content_faculty_member_designation           String?
+  page_content_faculty_member_profile_link          String?
+  page_content_faculty_member_linkedin_url          String?
+  page_content_faculty_member_vidwan_url            String?
+  page_content_faculty_member_sort_order            Int      @default(0)
+  page_content_faculty_member_is_active             Boolean  @default(true)
+
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @default(now()) @updatedAt @map("updated_at")
+
+  pageContentBlock                 PageContentBlock @relation("PageContentFacultyMember", fields: [content_block_id], references: [page_content_block_id], onDelete: Cascade)
+
+  @@index([content_block_id])
+  @@map("page_content_faculty_members")
 }

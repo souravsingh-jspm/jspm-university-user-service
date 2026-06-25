@@ -136,4 +136,28 @@ export const API_ERRORS = {
   CONTACT_NOT_FOUND: "Contact not found",
 
   SEND_PROPER_JSON: "Send a proper JSON data",
+
+  YOU_DO_NOT_HAVE_PERMISSION: "You don't have permissions for this action",
+};
+
+export const AUTH_SERVICE =
+  "http://localhost:3000/api/auth/.well-known/jwks.json";
+
+export const ROLES = {
+  ADMIN: "ADMIN",
+  USER: "USER",
+  SUPER_ADMIN: "SUPER_ADMIN",
+};
+
+export const STRINGS = {
+  SERVER_LISTENING_ON_PORT: "Server is listening on port",
+  USER: "user",
+  EXIT: "exit",
+  SIGINT: "SIGINT",
+  SIGUSR1: "SIGUSR1",
+  SIGUSR2: "SIGUSR2",
+  SIGTERM: "SIGTERM",
+  UNCAUGHT_EXCEPTION: "uncaughtException",
+  ONE_TIME_PASSWORD: "One time password",
+  DOES_NOT_EXIST: "Does not exist",
 };
