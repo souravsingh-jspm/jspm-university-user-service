@@ -7,7 +7,7 @@ const schoolController = new SchoolController();
 const SchoolRouter = express.Router();
 
 SchoolRouter.route(API_ENDPOINTS.SCHOOL).post(
-  authUser(),
+  // authUser(),
   schoolController.create,
 );
 

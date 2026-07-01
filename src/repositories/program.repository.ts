@@ -1,3 +1,4 @@
+import { ProgramType } from "@prisma/client";
 import prisma from "../configs/prisma.config";
 import { createProgramType, updateProgramType } from "../types/program.type";
 import { queryHandler } from "../utils/helper";
@@ -35,6 +36,40 @@ class ProgramRepository {
           take: limit,
         }),
         prisma.program.count(),
+      ]);
+      return {
+        data,
+        count,
+      };
+    });
+  };
+
+  getProgramByType = async (
+    type: ProgramType,
+    page: number,
+    limit: number,
+    search?: string,
+  ) => {
+    const skip = (page - 1) * limit;
+    const where = {
+      program_select_type: type,
+      program_name: {
+        contains: search,
+      },
+    };
+    return await queryHandler(async () => {
+      const [data, count] = await Promise.all([
+        prisma.program.findMany({
+          where,
+          skip,
+          take: limit,
+          select: {
+            program_id: true,
+            program_name: true,
+            program_select_type: true,
+          },
+        }),
+        prisma.program.count({ where }),
       ]);
       return {
         data,

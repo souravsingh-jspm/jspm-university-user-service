@@ -3,6 +3,7 @@ import { API_RESPONSES } from "../constants/app.constant";
 import ProgramService from "../services/program.service";
 import { StatusCodes } from "http-status-codes";
 import { getPagination } from "../utils/pagination";
+import { ProgramType } from "@prisma/client";
 
 class ProgramController {
   programService: ProgramService;
@@ -67,6 +68,29 @@ class ProgramController {
           pagination: getPagination(page, limit, result.count),
         },
         API_RESPONSES.ALL_PROGRAMS_FETCHED,
+      ),
+    );
+  });
+  getProgramByType = asyncHandler(async (req, res) => {
+    const type = req.query.type as ProgramType;
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+    const search = req.query.search as string | undefined;
+
+    const result = await this.programService.getProgramByType(
+      type as ProgramType,
+      page,
+      limit,
+      search,
+    );
+    return res.status(StatusCodes.OK).json(
+      new ApiResponse(
+        StatusCodes.OK,
+        {
+          data: result.data,
+          pagination: getPagination(page, limit, result.count),
+        },
+        API_RESPONSES.PROGRAMS_FETCHED,
       ),
     );
   });

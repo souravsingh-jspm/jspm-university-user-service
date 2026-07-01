@@ -4,6 +4,7 @@ import { createProgramType, updateProgramType } from "../types/program.type";
 import ProgramRepository from "../repositories/program.repository";
 import SchoolRepository from "../repositories/school.repository";
 import { StatusCodes } from "http-status-codes";
+import { ProgramType } from "@prisma/client";
 
 class ProgramService {
   programRepository: ProgramRepository;
@@ -50,6 +51,20 @@ class ProgramService {
   };
   getAll = async (page: number, limit: number) => {
     const events = await this.programRepository.getAll(page, limit);
+    return events;
+  };
+  getProgramByType = async (
+    type: ProgramType,
+    page: number,
+    limit: number,
+    search?: string,
+  ) => {
+    const events = await this.programRepository.getProgramByType(
+      type,
+      page,
+      limit,
+      search,
+    );
     return events;
   };
 }

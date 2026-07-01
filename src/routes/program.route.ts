@@ -13,5 +13,8 @@ ProgramRouter.route(API_ENDPOINTS.PROGRAM_BY_ID)
   .delete(programController.delete);
 
 ProgramRouter.route(API_ENDPOINTS.PROGRAMS).get(programController.getAll);
+ProgramRouter.route(API_ENDPOINTS.PROGRAMS_BY_TYPE).get(
+  programController.getProgramByType,
+);
 
 export default ProgramRouter;

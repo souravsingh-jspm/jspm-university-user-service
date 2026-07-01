@@ -41,6 +41,7 @@ export const API_ENDPOINTS = {
   PROGRAM: "/program",
   PROGRAM_BY_ID: "/program/:id",
   PROGRAMS: "/programs",
+  PROGRAMS_BY_TYPE: "/programs-type",
 };
 
 export const CMS_SECTION = {
