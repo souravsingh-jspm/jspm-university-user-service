@@ -2,6 +2,7 @@ import { ApiError } from "common-microservices-utils";
 import { API_ERRORS } from "../constants/app.constant";
 import { createContactType, updateContactType } from "../types/contact.type";
 import ContactSevice from "../repositories/contact.repository";
+import { ProgramType } from "@prisma/client";
 
 class ContactService {
   contactSevice: ContactSevice;
@@ -27,6 +28,18 @@ class ContactService {
       throw new ApiError(404, API_ERRORS.CONTACT_NOT_FOUND);
     }
     return chechkEvent;
+  };
+  getAllByLevel = async (
+    page: number,
+    limit: number,
+    contact_level: string,
+  ) => {
+    const data = await this.contactSevice.getAllByLevel(
+      page,
+      limit,
+      contact_level as ProgramType,
+    );
+    return data;
   };
   delete = async (id: string) => {
     const chechkEvent = await this.contactSevice.getById(id);

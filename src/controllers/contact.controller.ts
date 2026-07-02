@@ -69,6 +69,29 @@ class ContactController {
       ),
     );
   });
+
+  getAllByLevel = asyncHandler(async (req, res) => {
+    const contact_level = req.query.level;
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+
+    const result = await this.contactSerivce.getAllByLevel(
+      Number(page),
+      Number(limit),
+      contact_level as string,
+    );
+
+    return res.status(StatusCodes.OK).json(
+      new ApiResponse(
+        StatusCodes.OK,
+        {
+          data: result.data,
+          pagination: getPagination(page, limit, result.count),
+        },
+        API_RESPONSES.ALL_CONTACT_FETCHED,
+      ),
+    );
+  });
 }
 
 export default ContactController;

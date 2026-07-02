@@ -37,6 +37,7 @@ export const API_ENDPOINTS = {
   CONTACT: "/contact",
   CONTACT_BY_ID: "/contact/:id",
   CONTACTS: "/contacts",
+  CONTACTS_LIST: "/contacts-list",
 
   PROGRAM: "/program",
   PROGRAM_BY_ID: "/program/:id",

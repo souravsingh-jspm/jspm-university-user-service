@@ -1,481 +1,484 @@
-generator client {
-  provider = "prisma-client-js"
-}
+  generator client {
+    provider = "prisma-client-js"
+  }
 
-datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
-}
-
-
-enum Role {
-  USER
-  ADMIN
-  SUPER_ADMIN
- }
-
-enum PageSection {
-  HOME
-  SCHOOL
-  NONE
-}
-
-enum PageType {
-  TOP
-  HEADER
-  FOOTER
-  MAIN
-  NONE
-}
-
-enum ContentType {
-  CONTENT_PAGE
-  URL
-}
-
-enum TargetType {
-  SELF
-  NEW
-}
-
-enum ContentBlockType {
-  TITLE
-  SUB_HEADING
-  PARAGRAPH
-  RICH_TEXT
-  
-  BASIC_CARD
-  PROGRAM_IMAGE_CARD
-  IMAGE_CARD
-  TESTIMONIAL_ACCORDIAN
-  MARQUEE
-
-  CONTACT_LIST
-  FEATURE_LIST
-  PROFILE_LIST
-  FACULTY_LIST
-}
+  datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+  }
 
 
-enum EventType{
-  HOME
-  SCHOOL
-}
+  enum Role {
+    USER
+    ADMIN
+    SUPER_ADMIN
+  }
 
-enum ProgramType {
-  UNDER_GRADUATE
-  POST_GRADUATE
-  INTEGRATED
-  POST_DIPLOMA
-  POST_GRADUATE_DIPLOMA
-  CERTIFICATE
-}
+  enum PageSection {
+    HOME
+    SCHOOL
+    NONE
+  }
 
-model CmsPage {
-  cms_id               String              @id @default(uuid())
-  cms_page_name        String       
-  cms_slug             String              @unique
-  cms_parent_id        String?              
-  cms_page_order       Int                 @default(1) 
-  cms_external_url     String?             @db.Text
-  cms_page_title       String     
-  cms_meta_description String?             @db.Text
-  cms_meta_keywords    String?             @db.Text
-  cms_is_published     Boolean             @default(false) 
-  cms_school_id        String?     
-  cms_is_active        Boolean             @default(true) // soft delete page
-  cms_section          PageSection         @default(HOME) // home page or school page
-  cms_page_type        PageType            @default(NONE) // display on top, or just create page
-  cms_content_type     ContentType         @default(CONTENT_PAGE) // page holds content or it's url
-  cms_target           TargetType          @default(SELF) // should open on new page or same page
+  enum PageType {
+    TOP
+    HEADER
+    FOOTER
+    MAIN
+    NONE
+  }
 
-  createdAt            DateTime            @default(now())
-  updatedAt            DateTime            @updatedAt
-  parent               CmsPage?            @relation("PageHierarchy", fields: [cms_parent_id], references: [cms_id], onDelete: SetNull)
-  
-  children             CmsPage[]           @relation("PageHierarchy")
-  
-  school               School?             @relation(fields: [cms_school_id], references: [school_id], onDelete: SetNull)
+  enum ContentType {
+    CONTENT_PAGE
+    URL
+  }
 
-  pageContentBlocks    PageContentBlock[]  @relation("PageContentBlock")
-  
-  @@index([cms_slug])
-  @@index([cms_section])
-  @@index([cms_school_id])
-  @@index([cms_is_published])
-  @@index([cms_parent_id])
-  @@map("cms_pages")
-}
+  enum TargetType {
+    SELF
+    NEW
+  }
 
-model Faculty { 
-  faculty_id           String  @id @default(uuid())
-  faculty_name         String  
-  faculty_file_id      String?
-  faculty_sequance     Int  @default(0)
-  faculty_description  String?
-  facult_is_active     Boolean @default(true)
-  createdAt            DateTime         @default(now())  @map("created_at")
-  updatedAt                       DateTime         @updatedAt @map("updated_at")
-
-  schools              School[]
-
-  @@map("faculties")
-}
-
-model School {
-  school_id             String           @id @default(uuid())
-  school_name           String           @unique
-  school_file_id        String?
-  school_faculty_id     String?
-  school_slug           String           @unique
-  school_description    String?          @db.Text
-  school_is_active      Boolean          @default(true) @map("is_active") // soft delete school
-  createdAt             DateTime         @default(now())  @map("created_at")
-  updatedAt             DateTime         @updatedAt       @map("updated_at")
-  BLOGS                 BLOGS[]
-  EVENTS                EVENTS[]
-  NEWS                  NEWS[]
-  faculty               Faculty?             @relation(fields: [school_faculty_id], references: [faculty_id], onDelete: SetNull)
-
-  pages                 CmsPage[]
-  programs              Program[]
-
-  
-  @@map("schools")
-}
-
-model Program {
-  program_id             String           @id @default(uuid())
-  program_school_id      String?         
-  program_name           String?
-  program_select_type    ProgramType
-  program_duration       String?
-  program_fee_per_year   String?
-  program_eligibility    String?
-  program_intake         String?
-  program_is_active      Boolean            @default(true)
-  program_sequance       Int                @default(0)
-
-  contacts               Contact[]
-
-  schools                School?             @relation(fields: [program_school_id], references: [school_id], onDelete: SetNull)
-  
-  @@map("programs")
-}
-
-model Contact { 
-    contact_id          String    @id @default(uuid())
-    contact_name        String?
-    contact_phone       String?
-    contact_email       String?
-    contact_level       ProgramType? 
-    contact_program_id  String?
-    contanct_message    String?
-    contact_authorize   Boolean   @default(true)
-
-    programs            Program?  @relation(fields: [contact_program_id], references: [program_id], onDelete: SetNull)
-
-    @@map("contact")
-}
-
-
-
-model EVENTS { 
-  event_id                String           @id @default(uuid())
-  event_title             String?
-  event_image1_file_id    String?
-  event_image2_file_id    String?
-  event_short_description String?          @db.Text
-  event_long_description  String?          @db.LongText
-  event_place             String? 
-  event_type              EventType        @default(HOME)
-  event_school_id         String?
-  event_date              DateTime?
-  event_order             Int              @default(0) 
-  school                  School?          @relation(fields: [event_school_id], references: [school_id], onDelete: SetNull)
-  event_is_active         Boolean?         @default(true)
-  createdAt               DateTime         @default(now()) @map("created_at")
-  updatedAt               DateTime         @updatedAt @map("updated_at")
-}
-
-model BLOGS { 
-  blog_id                  String           @id @default(uuid())
-  blog_title               String?
-  blog_image1_file_id      String?
-  blog_image2_file_id      String?
-  blog_short_description   String?          @db.Text
-  blog_long_description    String?          @db.LongText
-  blog_type                EventType        @default(HOME)
-  blog_school_id           String?
-  blog_date                DateTime?
-  school                   School?          @relation(fields: [blog_school_id], references: [school_id], onDelete: SetNull)
-  blog_is_active           Boolean?         @default(true)
-  blog_order               Int              @default(0) 
-  createdAt                DateTime         @default(now()) @map("created_at")
-  updatedAt                DateTime         @updatedAt @map("updated_at")
-}
-
-model NEWS { 
-  news_id                  String           @id @default(uuid())
-  news_title               String?
-  news_image1_file_id      String?
-  news_image2_file_id      String?
-  news_short_description   String?          @db.Text
-  news_long_description    String?          @db.LongText
-  news_type                EventType        @default(HOME)
-  news_school_id           String?
-  news_date                DateTime?
-  school                   School?          @relation(fields: [news_school_id], references: [school_id], onDelete: SetNull)
-  news_is_active           Boolean?         @default(true)
-  news_order               Int              @default(0) 
-  createdAt                DateTime         @default(now()) @map("created_at")
-  updatedAt                DateTime         @updatedAt @map("updated_at")
-  @@map("news")
-}
-
-model PageContentBlock {
-  page_content_block_id           String              @id @default(uuid())
-  cms_page_id                     String
-  page_content_block_type         ContentBlockType    @map("block_type")
-  page_content_block_sort_order   Int                 @default(0)
-  page_content_block_is_published Boolean             @default(true)
-  createdAt                       DateTime            @default(now()) @map("created_at")
-  updatedAt                       DateTime            @updatedAt @map("updated_at")
-
-  page                            CmsPage             @relation("PageContentBlock", fields: [cms_page_id], references: [cms_id], onDelete: Cascade)
-
-  titles                          Title[]             @relation("PageContentBlockTitles")
-  subHeading                      SubHeading[]        @relation("PageContentBlockSubHeading")
-  richTextEditor                  RichTextEditor[]    @relation("PageContentRichTextEditor")
-  paragraph                       Paragraph[]         @relation("PageContentParagraph")
-  basicCard                       BasicCard[]         @relation("PageContentBasicCard")
-  programImageCard                ProgramImageCard[]  @relation("PageContentProgramImageCard")
-  imagecard                       ImageCard[]         @relation("ImageCard")
-  testimonialAccordian            TestimonialAccordian[] @relation("TestimonialAccordian")
-  marquee                         Marquee[]           @relation("Marquee")
-  pageContentContact              PageContentContact[] @relation("PageContentContact")
-  pageContentFeature              PageContentFeature[] @relation ("PageContentFeature")
-  PageContentProfile              PageContentProfile[] @relation("PageContentProfile")
-  PageContentFacultyMember        PageContentFacultyMember[] @relation("PageContentFacultyMember")
-  
-  @@index([cms_page_id])
-  @@index([page_content_block_type])
-  @@index([page_content_block_sort_order])
-  @@map("page_content_blocks")
-}
-
-model Title {
-  title_id               String            @id @default(uuid())
-  content_block_id       String?
-  title_description      String?
-
-  pageContentBlock       PageContentBlock? @relation("PageContentBlockTitles", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
-
-  createdAt                DateTime         @default(now()) @map("created_at")
-  updatedAt                DateTime          @default(now()) @updatedAt @map("updated_at")
-
-  @@index([content_block_id])
-  @@map("titles")
-}
-
-model SubHeading {
-  subheading_id               String            @id @default(uuid())
-  content_block_id            String?
-  subheading_description      String?
-
-  pageContentBlock            PageContentBlock? @relation("PageContentBlockSubHeading", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
-
-  createdAt                DateTime         @default(now()) @map("created_at")
-  updatedAt                DateTime         @default(now())  @updatedAt @map("updated_at")
-
-  @@index([content_block_id])
-  @@map("subheading")
-}
-
-model RichTextEditor {
-  rich_text_editor_id               String            @id @default(uuid())
-  content_block_id                   String?
-  rich_text_editor_description      String?           @db.LongText
-
-  pageContentBlock            PageContentBlock? @relation("PageContentRichTextEditor", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
-  
-  createdAt                DateTime         @default(now()) @map("created_at")
-  updatedAt                DateTime          @default(now()) @updatedAt @map("updated_at")
-  
-  @@index([content_block_id])
-  @@map("richtexteditor")
-}
-
-model Paragraph {
-  paragraph_id      String      @id @default(uuid())
-  content_block_id String?
-  paragraph_description      String?           @db.LongText
-
-  pageContentBlock            PageContentBlock? @relation("PageContentParagraph", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
-
-  createdAt                DateTime         @default(now()) @map("created_at")
-  updatedAt                DateTime          @default(now()) @updatedAt @map("updated_at")
-
-  @@index([content_block_id])
-  @@map("paragraph")
-}
-
-model BasicCard{
-  basic_card_id                          String      @id @default(uuid())
-  content_block_id                       String?
-  basic_card_title                       String?
-  basic_card_description                 String?
-  basic_card_link                        String?
-  basic_card_label                       String?
-  basic_card_color                       String?
-  basic_card_order                       Int         @default(0)
-
-  pageContentBlock            PageContentBlock? @relation("PageContentBasicCard", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
+  enum ContentBlockType {
+    TITLE
+    SUB_HEADING
+    PARAGRAPH
+    RICH_TEXT
     
-  createdAt                DateTime         @default(now()) @map("created_at")
-  updatedAt                DateTime         @default(now())  @updatedAt @map("updated_at")
+    BASIC_CARD
+    PROGRAM_IMAGE_CARD
+    IMAGE_CARD
+    TESTIMONIAL_ACCORDIAN
+    MARQUEE
 
-  @@index([content_block_id])
-  @@map("basiccard")
-}
+    CONTACT_LIST
+    FEATURE_LIST
+    PROFILE_LIST
+    FACULTY_LIST
+  }
 
-model ProgramImageCard{
-  program_image_card_id                          String      @id @default(uuid())
-  content_block_id                               String?
-  program_image_card_title                       String?
-  program_image_card_description                 String?
-  program_image_card_link                        String?
-  program_image_card_label                       String?
-  program_image_card_color                       String?
 
-  pageContentBlock            PageContentBlock? @relation("PageContentProgramImageCard", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
+  enum EventType{
+    HOME
+    SCHOOL
+  }
+
+  enum ProgramType {
+    UNDER_GRADUATE
+    POST_GRADUATE
+    INTEGRATED
+    POST_DIPLOMA
+    POST_GRADUATE_DIPLOMA
+    CERTIFICATE
+  }
+
+  model CmsPage {
+    cms_id               String              @id @default(uuid())
+    cms_page_name        String       
+    cms_slug             String              @unique
+    cms_parent_id        String?              
+    cms_page_order       Int                 @default(1) 
+    cms_external_url     String?             @db.Text
+    cms_page_title       String     
+    cms_meta_description String?             @db.Text
+    cms_meta_keywords    String?             @db.Text
+    cms_is_published     Boolean             @default(false) 
+    cms_school_id        String?     
+    cms_is_active        Boolean             @default(true) // soft delete page
+    cms_section          PageSection         @default(HOME) // home page or school page
+    cms_page_type        PageType            @default(NONE) // display on top, or just create page
+    cms_content_type     ContentType         @default(CONTENT_PAGE) // page holds content or it's url
+    cms_target           TargetType          @default(SELF) // should open on new page or same page
+
+    createdAt            DateTime            @default(now())
+    updatedAt            DateTime            @updatedAt
+    parent               CmsPage?            @relation("PageHierarchy", fields: [cms_parent_id], references: [cms_id], onDelete: SetNull)
     
-  createdAt                DateTime         @default(now()) @map("created_at")
-  updatedAt                DateTime         @default(now())  @updatedAt @map("updated_at")
-
-  @@index([content_block_id])
-  @@map("programimagecard")
-}
-
-model ImageCard{
-  image_card_id                          String      @id @default(uuid())
-  content_block_id                       String?
-  image_card_title                       String?
-  image_card_description                 String?
-  image_card_link                        String?
-  image_card_label                       String?
-  image_card_color                       String?
-
-  pageContentBlock            PageContentBlock? @relation("ImageCard", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
+    children             CmsPage[]           @relation("PageHierarchy")
     
-  createdAt                DateTime         @default(now()) @map("created_at")
-  updatedAt                DateTime          @default(now()) @updatedAt @map("updated_at")
+    school               School?             @relation(fields: [cms_school_id], references: [school_id], onDelete: SetNull)
 
-  @@index([content_block_id])
-  @@map("imagecard")
-}
-
-model TestimonialAccordian{
-  testimonial_accordian_id                          String      @id @default(uuid())
-  content_block_id                                  String?
-  testimonial_accordian_student_name                String?
-  testimonial_accordian_description                 String?
-  testimonial_accordian_image                       String?
-
-  pageContentBlock            PageContentBlock? @relation("TestimonialAccordian", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
+    pageContentBlocks    PageContentBlock[]  @relation("PageContentBlock")
     
-  createdAt                DateTime         @default(now()) @map("created_at")
-  updatedAt                DateTime          @default(now()) @updatedAt @map("updated_at")
+    @@index([cms_slug])
+    @@index([cms_section])
+    @@index([cms_school_id])
+    @@index([cms_is_published])
+    @@index([cms_parent_id])
+    @@map("cms_pages")
+  }
 
-  @@index([content_block_id])
-  @@map("testimonialAccordian")
-}
+  model Faculty { 
+    faculty_id           String  @id @default(uuid())
+    faculty_name         String  
+    faculty_file_id      String?
+    faculty_sequance     Int  @default(0)
+    faculty_description  String?
+    facult_is_active     Boolean @default(true)
+    createdAt            DateTime         @default(now())  @map("created_at")
+    updatedAt                       DateTime         @updatedAt @map("updated_at")
 
-model Marquee{
-  marquee_id          String        @id @default(uuid())
-  content_block_id    String?
-  marquee_text        String?
-  marquee_element     String?
+    schools              School[]
 
-  pageContentBlock    PageContentBlock? @relation("Marquee", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
+    @@map("faculties")
+  }
 
-  createdAt                DateTime         @default(now()) @map("created_at")
-  updatedAt                DateTime          @default(now()) @updatedAt @map("updated_at")
+  model School {
+    school_id             String           @id @default(uuid())
+    school_name           String           @unique
+    school_file_id        String?
+    school_faculty_id     String?
+    school_slug           String           @unique
+    school_description    String?          @db.Text
+    school_is_active      Boolean          @default(true) @map("is_active") // soft delete school
+    createdAt             DateTime         @default(now())  @map("created_at")
+    updatedAt             DateTime         @updatedAt       @map("updated_at")
+    BLOGS                 BLOGS[]
+    EVENTS                EVENTS[]
+    NEWS                  NEWS[]
+    faculty               Faculty?             @relation(fields: [school_faculty_id], references: [faculty_id], onDelete: SetNull)
 
-  @@index([content_block_id])
-  @@map("marquee")
-}
+    pages                 CmsPage[]
+    programs              Program[]
 
-model PageContentContact{
-  page_content_contact_id                    String           @id @default(uuid())
-  content_block_id                           String?
-  page_content_contact_image                 String?
-  page_content_contact_name                  String
-  page_content_contact_position              String?
-  page_content_contact_email                 String?
-  page_content_contact_contact               String?
-  page_content_contact_sort_order            Int      @default(0)
-  page_content_contact_is_active             Boolean  @default(true)
+    
+    @@map("schools")
+  }
 
-  pageContentBlock                           PageContentBlock? @relation("PageContentContact", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
+  model Program {
+    program_id             String           @id @default(uuid())
+    program_school_id      String?         
+    program_name           String?
+    program_select_type    ProgramType
+    program_duration       String?
+    program_fee_per_year   String?
+    program_eligibility    String?
+    program_intake         String?
+    program_is_active      Boolean            @default(true)
+    program_sequance       Int                @default(0)
 
-  createdAt                                  DateTime         @default(now()) @map("created_at")
-  updatedAt                                  DateTime         @default(now())  @updatedAt @map("updated_at")
-}
+    contacts               Contact[]
 
-model PageContentFeature {
-  page_content_feature_id                    String   @id @default(uuid())
-  content_block_id                           String
-  page_content_feature_image                 String?
-  page_content_feature_title                 String
-  page_content_feature_sort_order            Int      @default(0)
-  page_content_feature_is_active             Boolean  @default(true)
+    schools                School?             @relation(fields: [program_school_id], references: [school_id], onDelete: SetNull)
+    
+    @@map("programs")
+  }
 
-  createdAt                                  DateTime @default(now()) @map("created_at")
-  updatedAt                                  DateTime @default(now()) @updatedAt @map("updated_at")
+  model Contact { 
+      contact_id           String    @id @default(uuid())
+      contact_name         String?
+      contact_phone        String?
+      contact_email        String?
+      contact_level        ProgramType? 
+      contact_program_id   String?
+      contact_program_name String?
+      contanct_message     String?
+      contact_authorize    Boolean   @default(true) 
+      createdAt            DateTime  @default(now()) @map("created_at")
+      updatedAt            DateTime  @updatedAt @map("updated_at")
 
-  pageContentBlock                           PageContentBlock? @relation("PageContentFeature", fields: [content_block_id], references: [page_content_block_id], onDelete: Cascade)
+      programs            Program?  @relation(fields: [contact_program_id], references: [program_id], onDelete: SetNull)
 
-  @@index([content_block_id])
-  @@map("page_content_features")
-}
-
-model PageContentProfile {
-  page_content_profile_id                    String   @id @default(uuid())
-  content_block_id                           String
-  page_content_profile_image                 String?
-  page_content_profile_name                  String
-  page_content_profile_designation           String?
-  page_content_profile_sort_order            Int      @default(0)
-  page_content_profile_is_active             Boolean  @default(true)
-
-  createdAt                                  DateTime @default(now()) @map("created_at")
-  updatedAt                                  DateTime @default(now()) @updatedAt @map("updated_at")
-
-  pageContentBlock                           PageContentBlock? @relation("PageContentProfile", fields: [content_block_id], references: [page_content_block_id], onDelete: Cascade)
-
-  @@index([content_block_id])
-  @@map("page_content_profiles")
-}
+      @@map("contact")
+  }
 
 
-model PageContentFacultyMember {
-  page_content_faculty_member_id                    String   @id @default(uuid())
-  content_block_id                                  String
-  page_content_faculty_member_image                 String?
-  page_content_faculty_member_name                  String
-  page_content_faculty_member_designation           String?
-  page_content_faculty_member_profile_link          String?
-  page_content_faculty_member_linkedin_url          String?
-  page_content_faculty_member_vidwan_url            String?
-  page_content_faculty_member_sort_order            Int      @default(0)
-  page_content_faculty_member_is_active             Boolean  @default(true)
 
-  createdAt             DateTime @default(now()) @map("created_at")
-  updatedAt             DateTime @default(now()) @updatedAt @map("updated_at")
+  model EVENTS { 
+    event_id                String           @id @default(uuid())
+    event_title             String?
+    event_image1_file_id    String?
+    event_image2_file_id    String?
+    event_short_description String?          @db.Text
+    event_long_description  String?          @db.LongText
+    event_place             String? 
+    event_type              EventType        @default(HOME)
+    event_school_id         String?
+    event_date              DateTime?
+    event_order             Int              @default(0) 
+    school                  School?          @relation(fields: [event_school_id], references: [school_id], onDelete: SetNull)
+    event_is_active         Boolean?         @default(true)
+    createdAt               DateTime         @default(now()) @map("created_at")
+    updatedAt               DateTime         @updatedAt @map("updated_at")
+  }
 
-  pageContentBlock                 PageContentBlock @relation("PageContentFacultyMember", fields: [content_block_id], references: [page_content_block_id], onDelete: Cascade)
+  model BLOGS { 
+    blog_id                  String           @id @default(uuid())
+    blog_title               String?
+    blog_image1_file_id      String?
+    blog_image2_file_id      String?
+    blog_short_description   String?          @db.Text
+    blog_long_description    String?          @db.LongText
+    blog_type                EventType        @default(HOME)
+    blog_school_id           String?
+    blog_date                DateTime?
+    school                   School?          @relation(fields: [blog_school_id], references: [school_id], onDelete: SetNull)
+    blog_is_active           Boolean?         @default(true)
+    blog_order               Int              @default(0) 
+    createdAt                DateTime         @default(now()) @map("created_at")
+    updatedAt                DateTime         @updatedAt @map("updated_at")
+  }
 
-  @@index([content_block_id])
-  @@map("page_content_faculty_members")
-}
+  model NEWS { 
+    news_id                  String           @id @default(uuid())
+    news_title               String?
+    news_image1_file_id      String?
+    news_image2_file_id      String?
+    news_short_description   String?          @db.Text
+    news_long_description    String?          @db.LongText
+    news_type                EventType        @default(HOME)
+    news_school_id           String?
+    news_date                DateTime?
+    school                   School?          @relation(fields: [news_school_id], references: [school_id], onDelete: SetNull)
+    news_is_active           Boolean?         @default(true)
+    news_order               Int              @default(0) 
+    createdAt                DateTime         @default(now()) @map("created_at")
+    updatedAt                DateTime         @updatedAt @map("updated_at")
+    @@map("news")
+  }
+
+  model PageContentBlock {
+    page_content_block_id           String              @id @default(uuid())
+    cms_page_id                     String
+    page_content_block_type         ContentBlockType    @map("block_type")
+    page_content_block_sort_order   Int                 @default(0)
+    page_content_block_is_published Boolean             @default(true)
+    createdAt                       DateTime            @default(now()) @map("created_at")
+    updatedAt                       DateTime            @updatedAt @map("updated_at")
+
+    page                            CmsPage             @relation("PageContentBlock", fields: [cms_page_id], references: [cms_id], onDelete: Cascade)
+
+    titles                          Title[]             @relation("PageContentBlockTitles")
+    subHeading                      SubHeading[]        @relation("PageContentBlockSubHeading")
+    richTextEditor                  RichTextEditor[]    @relation("PageContentRichTextEditor")
+    paragraph                       Paragraph[]         @relation("PageContentParagraph")
+    basicCard                       BasicCard[]         @relation("PageContentBasicCard")
+    programImageCard                ProgramImageCard[]  @relation("PageContentProgramImageCard")
+    imagecard                       ImageCard[]         @relation("ImageCard")
+    testimonialAccordian            TestimonialAccordian[] @relation("TestimonialAccordian")
+    marquee                         Marquee[]           @relation("Marquee")
+    pageContentContact              PageContentContact[] @relation("PageContentContact")
+    pageContentFeature              PageContentFeature[] @relation ("PageContentFeature")
+    PageContentProfile              PageContentProfile[] @relation("PageContentProfile")
+    PageContentFacultyMember        PageContentFacultyMember[] @relation("PageContentFacultyMember")
+    
+    @@index([cms_page_id])
+    @@index([page_content_block_type])
+    @@index([page_content_block_sort_order])
+    @@map("page_content_blocks")
+  }
+
+  model Title {
+    title_id               String            @id @default(uuid())
+    content_block_id       String?
+    title_description      String?
+
+    pageContentBlock       PageContentBlock? @relation("PageContentBlockTitles", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
+
+    createdAt                DateTime         @default(now()) @map("created_at")
+    updatedAt                DateTime          @default(now()) @updatedAt @map("updated_at")
+
+    @@index([content_block_id])
+    @@map("titles")
+  }
+
+  model SubHeading {
+    subheading_id               String            @id @default(uuid())
+    content_block_id            String?
+    subheading_description      String?
+
+    pageContentBlock            PageContentBlock? @relation("PageContentBlockSubHeading", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
+
+    createdAt                DateTime         @default(now()) @map("created_at")
+    updatedAt                DateTime         @default(now())  @updatedAt @map("updated_at")
+
+    @@index([content_block_id])
+    @@map("subheading")
+  }
+
+  model RichTextEditor {
+    rich_text_editor_id               String            @id @default(uuid())
+    content_block_id                   String?
+    rich_text_editor_description      String?           @db.LongText
+
+    pageContentBlock            PageContentBlock? @relation("PageContentRichTextEditor", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
+    
+    createdAt                DateTime         @default(now()) @map("created_at")
+    updatedAt                DateTime          @default(now()) @updatedAt @map("updated_at")
+    
+    @@index([content_block_id])
+    @@map("richtexteditor")
+  }
+
+  model Paragraph {
+    paragraph_id      String      @id @default(uuid())
+    content_block_id String?
+    paragraph_description      String?           @db.LongText
+
+    pageContentBlock            PageContentBlock? @relation("PageContentParagraph", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
+
+    createdAt                DateTime         @default(now()) @map("created_at")
+    updatedAt                DateTime          @default(now()) @updatedAt @map("updated_at")
+
+    @@index([content_block_id])
+    @@map("paragraph")
+  }
+
+  model BasicCard{
+    basic_card_id                          String      @id @default(uuid())
+    content_block_id                       String?
+    basic_card_title                       String?
+    basic_card_description                 String?
+    basic_card_link                        String?
+    basic_card_label                       String?
+    basic_card_color                       String?
+    basic_card_order                       Int         @default(0)
+
+    pageContentBlock            PageContentBlock? @relation("PageContentBasicCard", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
+      
+    createdAt                DateTime         @default(now()) @map("created_at")
+    updatedAt                DateTime         @default(now())  @updatedAt @map("updated_at")
+
+    @@index([content_block_id])
+    @@map("basiccard")
+  }
+
+  model ProgramImageCard{
+    program_image_card_id                          String      @id @default(uuid())
+    content_block_id                               String?
+    program_image_card_title                       String?
+    program_image_card_description                 String?
+    program_image_card_link                        String?
+    program_image_card_label                       String?
+    program_image_card_color                       String?
+
+    pageContentBlock            PageContentBlock? @relation("PageContentProgramImageCard", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
+      
+    createdAt                DateTime         @default(now()) @map("created_at")
+    updatedAt                DateTime         @default(now())  @updatedAt @map("updated_at")
+
+    @@index([content_block_id])
+    @@map("programimagecard")
+  }
+
+  model ImageCard{
+    image_card_id                          String      @id @default(uuid())
+    content_block_id                       String?
+    image_card_title                       String?
+    image_card_description                 String?
+    image_card_link                        String?
+    image_card_label                       String?
+    image_card_color                       String?
+
+    pageContentBlock            PageContentBlock? @relation("ImageCard", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
+      
+    createdAt                DateTime         @default(now()) @map("created_at")
+    updatedAt                DateTime          @default(now()) @updatedAt @map("updated_at")
+
+    @@index([content_block_id])
+    @@map("imagecard")
+  }
+
+  model TestimonialAccordian{
+    testimonial_accordian_id                          String      @id @default(uuid())
+    content_block_id                                  String?
+    testimonial_accordian_student_name                String?
+    testimonial_accordian_description                 String?
+    testimonial_accordian_image                       String?
+
+    pageContentBlock            PageContentBlock? @relation("TestimonialAccordian", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
+      
+    createdAt                DateTime         @default(now()) @map("created_at")
+    updatedAt                DateTime          @default(now()) @updatedAt @map("updated_at")
+
+    @@index([content_block_id])
+    @@map("testimonialAccordian")
+  }
+
+  model Marquee{
+    marquee_id          String        @id @default(uuid())
+    content_block_id    String?
+    marquee_text        String?
+    marquee_element     String?
+
+    pageContentBlock    PageContentBlock? @relation("Marquee", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
+
+    createdAt                DateTime         @default(now()) @map("created_at")
+    updatedAt                DateTime          @default(now()) @updatedAt @map("updated_at")
+
+    @@index([content_block_id])
+    @@map("marquee")
+  }
+
+  model PageContentContact{
+    page_content_contact_id                    String           @id @default(uuid())
+    content_block_id                           String?
+    page_content_contact_image                 String?
+    page_content_contact_name                  String
+    page_content_contact_position              String?
+    page_content_contact_email                 String?
+    page_content_contact_contact               String?
+    page_content_contact_sort_order            Int      @default(0)
+    page_content_contact_is_active             Boolean  @default(true)
+
+    pageContentBlock                           PageContentBlock? @relation("PageContentContact", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
+
+    createdAt                                  DateTime         @default(now()) @map("created_at")
+    updatedAt                                  DateTime         @default(now())  @updatedAt @map("updated_at")
+  }
+
+  model PageContentFeature {
+    page_content_feature_id                    String   @id @default(uuid())
+    content_block_id                           String
+    page_content_feature_image                 String?
+    page_content_feature_title                 String
+    page_content_feature_sort_order            Int      @default(0)
+    page_content_feature_is_active             Boolean  @default(true)
+
+    createdAt                                  DateTime @default(now()) @map("created_at")
+    updatedAt                                  DateTime @default(now()) @updatedAt @map("updated_at")
+
+    pageContentBlock                           PageContentBlock? @relation("PageContentFeature", fields: [content_block_id], references: [page_content_block_id], onDelete: Cascade)
+
+    @@index([content_block_id])
+    @@map("page_content_features")
+  }
+
+  model PageContentProfile {
+    page_content_profile_id                    String   @id @default(uuid())
+    content_block_id                           String
+    page_content_profile_image                 String?
+    page_content_profile_name                  String
+    page_content_profile_designation           String?
+    page_content_profile_sort_order            Int      @default(0)
+    page_content_profile_is_active             Boolean  @default(true)
+
+    createdAt                                  DateTime @default(now()) @map("created_at")
+    updatedAt                                  DateTime @default(now()) @updatedAt @map("updated_at")
+
+    pageContentBlock                           PageContentBlock? @relation("PageContentProfile", fields: [content_block_id], references: [page_content_block_id], onDelete: Cascade)
+
+    @@index([content_block_id])
+    @@map("page_content_profiles")
+  }
+
+
+  model PageContentFacultyMember {
+    page_content_faculty_member_id                    String   @id @default(uuid())
+    content_block_id                                  String
+    page_content_faculty_member_image                 String?
+    page_content_faculty_member_name                  String
+    page_content_faculty_member_designation           String?
+    page_content_faculty_member_profile_link          String?
+    page_content_faculty_member_linkedin_url          String?
+    page_content_faculty_member_vidwan_url            String?
+    page_content_faculty_member_sort_order            Int      @default(0)
+    page_content_faculty_member_is_active             Boolean  @default(true)
+
+    createdAt             DateTime @default(now()) @map("created_at")
+    updatedAt             DateTime @default(now()) @updatedAt @map("updated_at")
+
+    pageContentBlock                 PageContentBlock @relation("PageContentFacultyMember", fields: [content_block_id], references: [page_content_block_id], onDelete: Cascade)
+
+    @@index([content_block_id])
+    @@map("page_content_faculty_members")
+  }

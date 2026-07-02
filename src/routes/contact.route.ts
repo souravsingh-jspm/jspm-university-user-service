@@ -14,4 +14,8 @@ ContactRouter.route(API_ENDPOINTS.CONTACT_BY_ID)
 
 ContactRouter.route(API_ENDPOINTS.CONTACTS).get(contactController.getAll);
 
+ContactRouter.route(API_ENDPOINTS.CONTACTS_LIST).get(
+  contactController.getAllByLevel,
+);
+
 export default ContactRouter;
