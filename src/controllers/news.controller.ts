@@ -1,6 +1,6 @@
 import { ApiResponse, asyncHandler } from "common-microservices-utils";
 import { API_RESPONSES } from "../constants/app.constant";
-import NewsService from "../services/blog.service";
+import NewsService from "../services/news.service";
 import { StatusCodes } from "http-status-codes";
 import { getPagination } from "../utils/pagination";
 class NewsController {

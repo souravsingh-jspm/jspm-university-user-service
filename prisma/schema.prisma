@@ -112,7 +112,7 @@
     faculty_name         String  
     faculty_file_id      String?
     faculty_sequance     Int  @default(0)
-    faculty_description  String?
+    faculty_description  String? @db.Text
     facult_is_active     Boolean @default(true)
     createdAt            DateTime         @default(now())  @map("created_at")
     updatedAt                       DateTime         @updatedAt @map("updated_at")
@@ -186,8 +186,8 @@
   model EVENTS { 
     event_id                String           @id @default(uuid())
     event_title             String?
-    event_image1_file_id    String?
-    event_image2_file_id    String?
+    event_image1_file_id    String?          @db.Text
+    event_image2_file_id    String?          @db.Text
     event_short_description String?          @db.Text
     event_long_description  String?          @db.LongText
     event_place             String? 
@@ -204,8 +204,8 @@
   model BLOGS { 
     blog_id                  String           @id @default(uuid())
     blog_title               String?
-    blog_image1_file_id      String?
-    blog_image2_file_id      String?
+    blog_image1_file_id      String?          @db.Text
+    blog_image2_file_id      String?          @db.Text
     blog_short_description   String?          @db.Text
     blog_long_description    String?          @db.LongText
     blog_type                EventType        @default(HOME)
@@ -221,8 +221,8 @@
   model NEWS { 
     news_id                  String           @id @default(uuid())
     news_title               String?
-    news_image1_file_id      String?
-    news_image2_file_id      String?
+    news_image1_file_id      String?          @db.Text
+    news_image2_file_id      String?          @db.Text
     news_short_description   String?          @db.Text
     news_long_description    String?          @db.LongText
     news_type                EventType        @default(HOME)

@@ -7,7 +7,7 @@ const FacultyRouter = Router();
 const facultyController = new FacultyController();
 
 FacultyRouter.route(API_ENDPOINTS.FACULTY).post(
-  authorizeAll([ROLES.USER, ROLES.ADMIN, ROLES.SUPER_ADMIN]),
+  // authorizeAll([ROLES.USER, ROLES.ADMIN, ROLES.SUPER_ADMIN]),
   facultyController.create,
 );
 
