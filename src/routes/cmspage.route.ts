@@ -9,7 +9,7 @@ const CMSPageRouter = express.Router();
 CMSPageRouter.route(API_ENDPOINTS.CMS_PAGE).post(cmsPageController.create);
 
 CMSPageRouter.route(API_ENDPOINTS.CMS_PAGE_BY_ID)
-  .put(authAdmin(), cmsPageController.update)
+  .put(cmsPageController.update)
   .get(cmsPageController.getById)
   .delete(cmsPageController.delete);
 

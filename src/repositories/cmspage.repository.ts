@@ -15,6 +15,21 @@ class CMSPageRepository {
 
   getById = async (cms_id: string) => {
     return await queryHandler(() =>
+      prisma.cmsPage.findMany({
+        where: { cms_id },
+        include: {
+          children: {
+            include: {
+              children: true,
+            },
+          },
+        },
+      }),
+    );
+  };
+
+  getByIdBasic = async (cms_id: string) => {
+    return await queryHandler(() =>
       prisma.cmsPage.findUnique({ where: { cms_id } }),
     );
   };

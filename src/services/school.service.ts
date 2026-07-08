@@ -47,7 +47,7 @@ class SchoolService {
   update = async (data: updateSchoolType, id: string) => {
     const checkSchoolExists = await this.schoolRepository.getById(id);
 
-    if (checkSchoolExists)
+    if (!checkSchoolExists)
       throw new ApiError(StatusCodes.BAD_REQUEST, API_ERRORS.INVALID_SCHOOL_ID);
 
     const result = await this.schoolRepository.update(data, id);
@@ -57,7 +57,7 @@ class SchoolService {
   delete = async (id: string) => {
     const checkSchoolExists = await this.schoolRepository.getById(id);
 
-    if (checkSchoolExists)
+    if (!checkSchoolExists)
       throw new ApiError(StatusCodes.BAD_REQUEST, API_ERRORS.INVALID_SCHOOL_ID);
 
     const data = await this.schoolRepository.delete(id);

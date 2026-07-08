@@ -45,24 +45,29 @@ class CMSPageService {
   };
 
   update = async (data: updateCMSPagelType, id: string) => {
-    const checkPageExits = await this.cMSPageRepository.getById(id);
+    const checkPageExits = await this.cMSPageRepository.getByIdBasic(id);
+    const checkSlugExits = await this.cMSPageRepository.getBySlug(
+      data.cms_slug as string,
+    );
 
     if (!checkPageExits)
       throw new ApiError(StatusCodes.BAD_REQUEST, API_ERRORS.PAGE_NOT_EXITS);
-
-    const result = await this.cMSPageRepository.update(data, id);
-    return { data: result };
+    const checkBothSame = checkPageExits.cms_slug === data.cms_slug;
+    if (checkBothSame) {
+      const result = await this.cMSPageRepository.update(data, id);
+      return { data: result };
+    } else
+      throw new ApiError(StatusCodes.BAD_REQUEST, API_ERRORS.PAGE_SLUG_ERROR);
   };
   getById = async (id: string) => {
-    const isIdValid = await this.cMSPageRepository.getById(id);
-    if (!isIdValid)
-      throw new ApiError(StatusCodes.BAD_REQUEST, API_ERRORS.PAGE_NOT_EXITS);
     const result = await this.cMSPageRepository.getById(id);
+    if (!result)
+      throw new ApiError(StatusCodes.BAD_REQUEST, API_ERRORS.PAGE_NOT_EXITS);
     return result;
   };
 
   delete = async (id: string) => {
-    const isIdValid = await this.cMSPageRepository.getById(id);
+    const isIdValid = await this.cMSPageRepository.getByIdBasic(id);
     if (!isIdValid)
       throw new ApiError(StatusCodes.BAD_REQUEST, API_ERRORS.PAGE_NOT_EXITS);
     const result = await this.cMSPageRepository.delete(id);
