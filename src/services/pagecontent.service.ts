@@ -141,27 +141,27 @@ class PageContentService {
         )
       : null;
 
-    const content_feature = data.content_contact
+    const content_feature = data.content_feature
       ? await this.contentFeatureRepository.createMany(
-          data.content_contact.map((card: any) => ({
+          data.content_feature.map((card: any) => ({
             ...card,
             content_block_id,
           })),
         )
       : null;
 
-    const content_profile = data.content_contact
+    const content_profile = data.content_profile
       ? await this.contentProfileRepository.createMany(
-          data.content_contact.map((card: any) => ({
+          data.content_profile.map((card: any) => ({
             ...card,
             content_block_id,
           })),
         )
       : null;
 
-    const content_faculty = data.content_contact
+    const content_faculty = data.content_faculty
       ? await this.contentFacultyRepository.createMany(
-          data.content_contact.map((card: any) => ({
+          data.content_faculty.map((card: any) => ({
             ...card,
             content_block_id,
           })),

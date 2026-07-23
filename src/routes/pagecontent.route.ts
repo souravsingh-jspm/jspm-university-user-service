@@ -9,9 +9,6 @@ PageContentRouter.route(API_ENDPOINTS.PAGE_CONTENT).post(
   pageContentController.create,
 );
 
-PageContentRouter.route(API_ENDPOINTS.PAGE_CONTENT).post(
-  pageContentController.create,
-);
 PageContentRouter.route(API_ENDPOINTS.PAGE_CONTENTS).get(
   pageContentController.getAll,
 );

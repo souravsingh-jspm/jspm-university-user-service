@@ -54,6 +54,21 @@ class PageContentRepository {
       prisma.pageContentBlock.findMany({
         where: { cms_page_id },
         orderBy: { page_content_block_sort_order: "asc" },
+        include: {
+          titles: true,
+          paragraph: true,
+          richTextEditor: true,
+          subHeading: true,
+          basicCard: true,
+          programImageCard: true,
+          imagecard: true,
+          testimonialAccordian: true,
+          marquee: true,
+          pageContentContact: true,
+          pageContentFeature: true,
+          PageContentProfile: true,
+          PageContentFacultyMember: true,
+        },
       }),
     );
   };

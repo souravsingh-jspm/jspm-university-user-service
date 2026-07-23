@@ -270,7 +270,7 @@
   model Title {
     title_id               String            @id @default(uuid())
     content_block_id       String?
-    title_description      String?
+    title_description      String?          @db.LongText
 
     pageContentBlock       PageContentBlock? @relation("PageContentBlockTitles", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
 
@@ -284,7 +284,7 @@
   model SubHeading {
     subheading_id               String            @id @default(uuid())
     content_block_id            String?
-    subheading_description      String?
+    subheading_description      String?           @db.LongText
 
     pageContentBlock            PageContentBlock? @relation("PageContentBlockSubHeading", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
 
@@ -327,7 +327,7 @@
     basic_card_id                          String      @id @default(uuid())
     content_block_id                       String?
     basic_card_title                       String?
-    basic_card_description                 String?
+    basic_card_description                 String? @db.LongText
     basic_card_link                        String?
     basic_card_label                       String?
     basic_card_color                       String?
@@ -346,7 +346,7 @@
     program_image_card_id                          String      @id @default(uuid())
     content_block_id                               String?
     program_image_card_title                       String?
-    program_image_card_description                 String?
+    program_image_card_description                 String?     @db.LongText
     program_image_card_link                        String?
     program_image_card_label                       String?
     program_image_card_color                       String?
@@ -364,7 +364,7 @@
     image_card_id                          String      @id @default(uuid())
     content_block_id                       String?
     image_card_title                       String?
-    image_card_description                 String?
+    image_card_description                 String?     @db.LongText
     image_card_link                        String?
     image_card_label                       String?
     image_card_color                       String?
@@ -382,7 +382,7 @@
     testimonial_accordian_id                          String      @id @default(uuid())
     content_block_id                                  String?
     testimonial_accordian_student_name                String?
-    testimonial_accordian_description                 String?
+    testimonial_accordian_description                 String?     @db.LongText
     testimonial_accordian_image                       String?
 
     pageContentBlock            PageContentBlock? @relation("TestimonialAccordian", fields: [content_block_id],references: [page_content_block_id], onDelete: Cascade)
